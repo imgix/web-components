@@ -9,6 +9,7 @@
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc --watch",
+    "build:prod": "rollup -c rollup.config.js",
     "clean": "npm run clean:video && npm run clean:gif && npm run clean:index",
     "clean:index": "rimraf index.{d.ts,d.ts.map,js,js.map} test/index.{d.ts,d.ts.map,js,js.map}",
     "clean:video": "rimraf ix-video.{d.ts,d.ts.map,js,js.map} test/ix_video_test.{d.ts,d.ts.map,js,js.map}",
@@ -26,8 +27,8 @@
     "docs:serve": "wds --root-dir=docs --node-resolve --watch",
     "analyze": "cem analyze --litelement --globs \"src/**/*.ts\"",
     "analyze:watch": "cem analyze --litelement --globs \"src/**/*.ts\" --watch",
-    "serve": "wds --open dev/ --watch --node-resolve",
-    "serve:prod": "MODE=prod npm run serve",
+    "serve": "wds --open serve/dev/ --watch --node-resolve",
+    "serve:prod": "MODE=prod wds --open serve/prod/ --watch --node-resolve",
     "test": "npm run test:dev && npm run test:prod",
     "test:dev": "wtr",
     "test:watch": "wtr --watch",
