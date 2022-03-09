@@ -34,13 +34,15 @@ shared-wc is an imgix web components library.
 `<ix-video>` can be configured with attributed in plain HTML.
 
 ```html
-<ix-video videoSrc="my.video/file"></ix-video>
+<ix-video
+  videoSrc="https://assets.imgix.net/videos/girl-reading-book-in-library.mp4"
+></ix-video>
 ```
 
   </div>
   <div>
 
-<ix-video videoSrc="my.video/file"></ix-video>
+<ix-video videoSrc="https://assets.imgix.net/videos/girl-reading-book-in-library.mp4"></ix-video>
 
   </div>
 </section>
@@ -55,7 +57,8 @@ shared-wc is an imgix web components library.
 ```js
 import {html, render} from 'lit-html';
 
-const videoSrc = 'lit-html';
+const videoSrc =
+  'https://assets.imgix.net/videos/girl-reading-book-in-library.mp4';
 
 render(
   html`
@@ -70,7 +73,7 @@ render(
   <div>
 
 <h2>This is a &lt;ix-video&gt;</h2>
-<ix-video videoSrc="lit-html"></ix-video>
+<ix-video videoSrc="https://assets.imgix.net/videos/girl-reading-book-in-library.mp4"></ix-video>
 
   </div>
 </section>

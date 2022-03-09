@@ -12,7 +12,7 @@ description: A basic example of ix-video usage
     padding: 8px;
   }
 </style>
-<ix-video>
+<ix-video videoSrc="https://assets.imgix.net/videos/girl-reading-book-in-library.mp4">
 </ix-video>
 
 <h3>CSS</h3>
@@ -27,5 +27,8 @@ p {
 <h3>HTML</h3>
 
 ```html
-<ix-video> </ix-video>
+<ix-video
+  videoSrc="https://assets.imgix.net/videos/girl-reading-book-in-library.mp4"
+>
+</ix-video>
 ```
