@@ -44,21 +44,21 @@
 <section class="columns">
   <div>
 <p><code>&lt;ix-video&gt;</code> can be configured with attributed in plain HTML.</p>
-<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>ix-video</span> <span class="token attr-name">videoSrc</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>my.video/file<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>ix-video</span><span class="token punctuation">></span></span></code></pre>
+<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>ix-video</span><br>  <span class="token attr-name">videoSrc</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>https://assets.imgix.net/videos/girl-reading-book-in-library.mp4<span class="token punctuation">"</span></span><br><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>ix-video</span><span class="token punctuation">></span></span></code></pre>
   </div>
   <div>
-<p><ix-video videoSrc="my.video/file"></ix-video></p>
+<p><ix-video videoSrc="https://assets.imgix.net/videos/girl-reading-book-in-library.mp4"></ix-video></p>
   </div>
 </section>
 <h2>Declarative rendering</h2>
 <section class="columns">
   <div>
 <p><code>&lt;ix-video&gt;</code> can be used with declarative rendering libraries like Angular, React, Vue, and lit-html</p>
-<pre class="language-js"><code class="language-js"><span class="token keyword">import</span> <span class="token punctuation">{</span>html<span class="token punctuation">,</span> render<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'lit-html'</span><span class="token punctuation">;</span><br><br><span class="token keyword">const</span> videoSrc <span class="token operator">=</span> <span class="token string">'lit-html'</span><span class="token punctuation">;</span><br><br><span class="token function">render</span><span class="token punctuation">(</span><br>  html<span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string"><br>    &lt;h2>This is a &amp;lt;ix-video&amp;gt;&lt;/h2><br>    &lt;ix-video .videoSrc=</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>videoSrc<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">>&lt;/ix-video><br>  </span><span class="token template-punctuation string">`</span></span><span class="token punctuation">,</span><br>  document<span class="token punctuation">.</span>body<br><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<pre class="language-js"><code class="language-js"><span class="token keyword">import</span> <span class="token punctuation">{</span>html<span class="token punctuation">,</span> render<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'lit-html'</span><span class="token punctuation">;</span><br><br><span class="token keyword">const</span> videoSrc <span class="token operator">=</span><br>  <span class="token string">'https://assets.imgix.net/videos/girl-reading-book-in-library.mp4'</span><span class="token punctuation">;</span><br><br><span class="token function">render</span><span class="token punctuation">(</span><br>  html<span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string"><br>    &lt;h2>This is a &amp;lt;ix-video&amp;gt;&lt;/h2><br>    &lt;ix-video .videoSrc=</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>videoSrc<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">>&lt;/ix-video><br>  </span><span class="token template-punctuation string">`</span></span><span class="token punctuation">,</span><br>  document<span class="token punctuation">.</span>body<br><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
   </div>
   <div>
 <h2>This is a &lt;ix-video&gt;</h2>
-<ix-video videoSrc="lit-html"></ix-video>
+<ix-video videoSrc="https://assets.imgix.net/videos/girl-reading-book-in-library.mp4"></ix-video>
   </div>
 </section>
 
