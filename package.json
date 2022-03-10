@@ -42,7 +42,7 @@
     "typescript",
     "lit"
   ],
-  "author": "Google LLC",
+  "author": "imgix",
   "license": "BSD-3-Clause",
   "dependencies": {
     "lit": "^2.1.0"
