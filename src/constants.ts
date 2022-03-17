@@ -13,7 +13,7 @@ export const VIDEO_PARAMETERS = {
  * domain: If the src URL is relative, it will be appended to the domain.
  * dataSetup: video.js modifiers, which will be passed on to video.js.
  */
-export interface VideoProps {
+export interface VideoProps extends HTMLVideoElement {
   src: string;
   domain?: string;
   dataSetup?: string;
