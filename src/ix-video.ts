@@ -2,6 +2,7 @@ import {css, html, LitElement} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
 import {ref, createRef} from 'lit/directives/ref.js';
 
+import videojs from 'video.js';
 
 /**
  *
@@ -28,12 +29,17 @@ export class IxVideo extends LitElement {
     return html`
       <div>
         <h1>videoSrc: ${this.videoSrc}</h1>
-        <video controls id="ix-video-player" ${ref(this.videoRef)} part="video">
+        <video src=${this.videoSrc} controls id="ix-video-player" ${ref(this.videoRef)} part="video">
         </video>
       </div>
     `;
   }
 
+  override firstUpdated(): void {
+    videojs(this.videoRef?.value as HTMLVideoElement, {}, () => {
+      videojs.log('Your player is ready!');
+      console.log(this);
+    });
   }
 }
 
