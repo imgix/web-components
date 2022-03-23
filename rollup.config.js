@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
+import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import summary from 'rollup-plugin-summary';
@@ -33,6 +34,7 @@ export default {
         },
       },
     }),
+    commonjs(),
     summary(),
   ],
 };
