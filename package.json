@@ -45,7 +45,8 @@
   "author": "imgix",
   "license": "BSD-3-Clause",
   "dependencies": {
-    "lit": "^2.1.0"
+    "lit": "^2.1.0",
+    "video.js": "^7.18.1"
   },
   "devDependencies": {
     "@11ty/eleventy": "^0.12.1",
@@ -57,6 +58,7 @@
     "@rollup/plugin-node-resolve": "^13.0.4",
     "@rollup/plugin-replace": "^3.0.0",
     "@types/mocha": "^9.0.0",
+    "@types/video.js": "^7.3.32",
     "@typescript-eslint/eslint-plugin": "^4.3.0",
     "@typescript-eslint/parser": "^4.30.0",
     "@web/dev-server": "^0.1.22",
