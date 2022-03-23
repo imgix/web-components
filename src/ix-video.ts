@@ -1,5 +1,7 @@
 import {css, html, LitElement} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
+import {ref, createRef} from 'lit/directives/ref.js';
+
 
 /**
  *
@@ -14,6 +16,8 @@ export class IxVideo extends LitElement {
     }
   `;
 
+  videoRef = createRef<HTMLVideoElement>();
+
   /**
    * The source of the HLS video playlist
    */
@@ -24,17 +28,12 @@ export class IxVideo extends LitElement {
     return html`
       <div>
         <h1>videoSrc: ${this.videoSrc}</h1>
-        <video controls @click=${this._onClick} part="video">
-          <!-- <source src="${this
-            .videoSrc}" type="application/x-mpegURL" /> -->
-          <source src="${this.videoSrc}" type="video/mp4" />
+        <video controls id="ix-video-player" ${ref(this.videoRef)} part="video">
         </video>
       </div>
     `;
   }
 
-  private _onClick() {
-    this.dispatchEvent(new CustomEvent('ix-video-clicked'));
   }
 }
 
