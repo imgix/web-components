@@ -7,6 +7,7 @@
 import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
+import postcss from 'rollup-plugin-postcss';
 import summary from 'rollup-plugin-summary';
 import {terser} from 'rollup-plugin-terser';
 
@@ -33,6 +34,9 @@ export default {
           regex: /^__/,
         },
       },
+    }),
+    postcss({
+      plugins: [],
     }),
     commonjs(),
     summary(),
