@@ -21,7 +21,7 @@ export class IxVideo extends LitElement {
       <style>
         #ix-video-player {
           width: 450px;
-          height: 250px;
+          height: 240px;
         }
       </style>
       <video
@@ -31,8 +31,9 @@ export class IxVideo extends LitElement {
         controls
         id="ix-video-player"
         part="video"
-        src=${this.videoSrc}
-      ></video>
+      >
+        <source src="${this.videoSrc}" type="application/x-mpegURL" />
+      </video>
     `;
   }
 
