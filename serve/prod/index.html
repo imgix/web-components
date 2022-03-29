@@ -4,22 +4,14 @@
   <head>
     <meta charset="utf-8" />
     <title>&lt;ix-video> Demo</title>
-    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-    <script src="../node_modules/lit/polyfill-support.js"></script>
+    <script src="../../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="../../node_modules/lit/polyfill-support.js"></script>
     <script type="module" src="../../dist/index.bundled.js"></script>
-    <style>
-      p {
-        border: solid 1px blue;
-        padding: 8px;
-      }
-    </style>
   </head>
   <body>
     <ix-video
-      videoSrc="https://assets.imgix.net/videos/girl-reading-book-in-library.mp4"
+      videoSrc="https://assets.imgix.video/videos/girl-reading-book-in-library.mp4?fm=hls"
     >
-      <!-- TODO: change local build src to be HLS video -->
-      <!-- videoSrc="https://assets.imgix.video/videos/girl-reading-book-in-library.mp4?fm=hls" -->
     </ix-video>
   </body>
 </html>

@@ -10,9 +10,10 @@ import replace from '@rollup/plugin-replace';
 import postcss from 'rollup-plugin-postcss';
 import summary from 'rollup-plugin-summary';
 import {terser} from 'rollup-plugin-terser';
+import ts from 'rollup-plugin-ts';
 
 export default {
-  input: 'index.js',
+  input: './src/index.ts',
   output: {
     file: './dist/index.bundled.js',
     format: 'esm',
@@ -23,7 +24,8 @@ export default {
     }
   },
   plugins: [
-    replace({'Reflect.decorate': 'undefined'}),
+    ts(),
+    replace({'Reflect.decorate': 'undefined', preventAssignment: true}),
     resolve(),
     terser({
       ecma: 2017,
