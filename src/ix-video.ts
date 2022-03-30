@@ -33,16 +33,6 @@ export class IxVideo extends LitElement {
 
   override render() {
     return html`
-      <link
-        href="https://vjs.zencdn.net/7.18.1/video-js.css"
-        rel="stylesheet"
-      />
-      <style>
-        #ix-video-player {
-          width: ${this.width};
-          height: ${this.height};
-        }
-      </style>
       <video
         ${ref(this.videoRef)}
         class="video-js vjs-default-skin"
@@ -59,6 +49,17 @@ export class IxVideo extends LitElement {
     videojs(this.videoRef?.value as HTMLVideoElement, {}, () => {
       videojs.log('Your player is ready!');
     });
+  }
+
+  /**
+   * This is a hack to disable Shadow DOM in lit-element. Removes the shadowRoot
+   * and renders the elements as children of the host element.
+   *
+   * This also impedes our ability to use `css` and `cssPart` in lit-element.
+   * Styling is instead done in the style tag.
+   */
+  protected override createRenderRoot() {
+    return this;
   }
 }
 
