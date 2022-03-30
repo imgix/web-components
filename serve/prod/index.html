@@ -8,10 +8,31 @@
     <script src="../../node_modules/lit/polyfill-support.js"></script>
     <script type="module" src="../../dist/index.bundled.js"></script>
   </head>
+  <style>
+    body {
+      justify-content: center;
+      display: flex;
+      position: relative;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      margin-top: 40vh;
+    }
+    .video-container {
+      position: relative;
+      width: 500px;
+      height: 500px;
+    }
+  </style>
   <body>
+    <div class="video-container">
     <ix-video
-      videoSrc="https://assets.imgix.video/videos/girl-reading-book-in-library.mp4?fm=hls"
+      source="https://assets.imgix.video/videos/girl-reading-book-in-library.mp4"
+      width="450px"
+      height="240px"
     >
+    </div>
     </ix-video>
   </body>
 </html>
