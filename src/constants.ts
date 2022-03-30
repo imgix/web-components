@@ -14,7 +14,9 @@ export const VIDEO_PARAMETERS = {
  * dataSetup: video.js modifiers, which will be passed on to video.js.
  */
 export interface VideoProps extends HTMLVideoElement {
-  src: string;
   domain?: string;
   dataSetup?: string;
+  height: string;
+  src: string;
+  width: string;
 }
