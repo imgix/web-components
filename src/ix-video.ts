@@ -9,30 +9,48 @@ import 'video.js/dist/video-js.css';
  */
 @customElement('ix-video')
 export class IxVideo extends LitElement {
+  //  TODO: style video.js classes
+  // static override styles = css``;
   videoRef = createRef<HTMLVideoElement>();
 
   /**
    * The source of the HLS video playlist
    */
   @property({type: String})
-  videoSrc = '';
+  source = '';
+
+  /**
+   * Video player width
+   */
+  @property({type: String})
+  width = '100%';
+
+  /**
+   * Video player height
+   */
+  @property({type: String})
+  height = '100%';
+
   override render() {
     return html`
+      <link
+        href="https://vjs.zencdn.net/7.18.1/video-js.css"
+        rel="stylesheet"
+      />
       <style>
         #ix-video-player {
-          width: 450px;
-          height: 240px;
+          width: ${this.width};
+          height: ${this.height};
         }
       </style>
       <video
         ${ref(this.videoRef)}
-        autoplay
         class="video-js vjs-default-skin"
         controls
         id="ix-video-player"
         part="video"
       >
-        <source src="${this.videoSrc}" type="application/x-mpegURL" />
+        <source src="${this.source}" type="application/x-mpegURL" />
       </video>
     `;
   }
@@ -40,19 +58,7 @@ export class IxVideo extends LitElement {
   override firstUpdated(): void {
     videojs(this.videoRef?.value as HTMLVideoElement, {}, () => {
       videojs.log('Your player is ready!');
-      console.log(this);
     });
-  }
-
-  /**
-   * This is a hack to disable Shadow DOM in lit-element. Removes the shadowRoot
-   * and renders the elements as children of the host element.
-   *
-   * This also impedes our ability to use `css` and `cssPart` in lit-element.
-   * Styling is instead done in the style tag.
-   */
-  protected override createRenderRoot() {
-    return this;
   }
 }
 
