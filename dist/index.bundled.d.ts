@@ -3,7 +3,8 @@ import { LitElement } from "lit";
  * @csspart video - The video element
  */
 declare class IxVideo extends LitElement {
-    static styles: import("lit").CSSResult;
+    //  TODO: style video.js classes
+    // static override styles = css``;
     videoRef: import("lit-html/directives/ref").Ref<HTMLVideoElement>;
     /**
      * The source of the HLS video playlist
