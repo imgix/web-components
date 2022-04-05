@@ -1,39 +1,51 @@
-import {VideoJsPlayerOptions} from 'video.js';
+import {AttributeOptions, DataSetup} from './types';
 
 /**
- * Set the attributes of the video element as the values of the
- * VideoJsPlayerOptions object if they are not already set and the attribute is
- * not null.
+ * Set and or override the dataSetup options for the video.js player instance to
+ * the given options. The options are usually the ix-video attribute values.
  * @returns {typeof VideoJsPlayerOptions}
  */
 export const buildOptionsObj = (
-  dataSetup: any, // eslint-disable-line @typescript-eslint/no-explicit-any
-  options: {
-    source: string;
-    controls: boolean;
-    width: string;
-    height: string;
-  }
-): VideoJsPlayerOptions => {
-  const {source, controls, width, height} = options;
+  dataSetup: DataSetup, // eslint-disable-line @typescript-eslint/no-explicit-any
+  options: AttributeOptions
+): DataSetup => {
+  const {source} = options;
 
-  if (!dataSetup.sources?.length && source.length) {
+  // Write options to dataSetup
+  Object.keys(options).forEach((key) => {
+    if (options[key].toString().length) {
+      if (key === 'source') {
+        return;
+      }
+      dataSetup[key] = options[key];
+    }
+  });
+  // Assume source attribute is always an HLS source.
+  if (options.source.length)
     dataSetup.sources = [
       {
         src: source,
         type: 'application/x-mpegURL',
       },
     ];
-  }
-  if (!dataSetup.controls && controls) {
-    dataSetup.controls = controls;
-  }
-  if (!dataSetup.width && width.length) {
-    dataSetup.width = width;
-  }
-  if (!dataSetup.height && height.length) {
-    dataSetup.height = height;
-  }
 
-  return dataSetup as VideoJsPlayerOptions;
+  return dataSetup;
+};
+
+export const createStyleDefaults = (
+  dataSetup: DataSetup,
+  width: string,
+  height: string
+) => {
+  // if no attribute width or height and no dataSetup width or height,
+  // we default to 100% of parent dimensions.
+  const noWidthOrHeight =
+    !width.length &&
+    !height.length &&
+    !dataSetup.width.toString().length &&
+    !dataSetup.height.toString().length;
+  return {
+    width: noWidthOrHeight ? '100%' : '',
+    height: noWidthOrHeight ? '100%' : '',
+  };
 };
