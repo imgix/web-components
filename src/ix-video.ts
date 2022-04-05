@@ -42,8 +42,7 @@ export class IxVideo extends LitElement {
   controls = false;
 
   /**
-   * Video.js dataSetup options json string. Converts to a VideoJsPlayerOptions
-   * object. If not set, defaults to {}. If invalid json, defaults to {}.
+   * Video.js dataSetup options json string.
    * @see https://docs.videojs.com/tutorial-options.html
    */
   @property({
