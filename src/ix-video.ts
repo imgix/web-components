@@ -4,7 +4,7 @@ import {createRef, ref} from 'lit/directives/ref.js';
 import {styleMap} from 'lit/directives/style-map.js';
 import videojs, {VideoJsPlayerOptions} from 'video.js';
 import 'video.js/dist/video-js.css';
-import {convertOptionsStringToObject} from './converters';
+import {convertJSONStringToObject} from './converters';
 import {buildOptionsObj} from './helpers';
 
 /**
@@ -48,21 +48,21 @@ export class IxVideo extends LitElement {
    */
   @property({
     type: String,
-    converter: (value) => convertOptionsStringToObject(value),
   })
-  dataSetup = {} as VideoJsPlayerOptions;
+  dataSetup = '{}';
 
   override render() {
     // if no w/h attr set, we default to 100% of parent dimensions.
-    const noWidthOrHeight = !this.width.length && !this.height.length;
+    const noWidthOrHeight =
+      !this.width.length && !this.height.length && this.dataSetup.length < 3;
+    const styles = {
+      width: noWidthOrHeight ? '100%' : '',
+      height: noWidthOrHeight ? '100%' : '',
+    };
     return html`
       <video
         ${ref(this.videoRef)}
-        style=${noWidthOrHeight &&
-        styleMap({
-          width: '100%',
-          height: '100%',
-        })}
+        style=${styleMap(styles)}
         class="video-js vjs-default-skin"
         id="ix-video-player"
         part="video"
@@ -72,14 +72,18 @@ export class IxVideo extends LitElement {
 
   override firstUpdated(): void {
     const player = this.videoRef?.value as HTMLVideoElement;
-    const options = buildOptionsObj(this.dataSetup, {
+    const dataSetup = convertJSONStringToObject(this.dataSetup);
+    const options = buildOptionsObj(dataSetup, {
       source: this.source,
       controls: this.controls,
       width: this.width,
       height: this.height,
-    });
+    }) as VideoJsPlayerOptions;
+
+    console.info('ix-video: options', options);
+
     videojs(player, options, () => {
-      videojs.log('player ready');
+      videojs.log('ix-video player ready');
     });
   }
 
