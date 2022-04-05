@@ -32,6 +32,16 @@ export const buildOptionsObj = (
   return dataSetup;
 };
 
+/**
+ * Create a style object that defaults to 100% width and height if:
+ * 1. No width or height is set on the ix-video element
+ * 2. The dataSetup attribute is not set
+ * 3. The dataSetup attribute is set but has no width or height values
+ * @param {DataSetup} dataSetup  - The dataSetup videojs options object
+ * @param {string} width - The ix-video with attribute value
+ * @param {string} height - The ix-video height attribute value
+ * @returns A style object with width and height properties
+ */
 export const createStyleDefaults = (
   dataSetup: DataSetup,
   width: string,
