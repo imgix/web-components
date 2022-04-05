@@ -1,25 +1,23 @@
-import {VideoJsPlayerOptions} from 'video.js';
-
+import {DataSetup} from './types';
 /**
  * Validate dataSetup JSON string & convert it to a VideoJsPlayerOptions object.
  * @param value
- * @returns {VideoJsPlayerOptions}
+ * @returns {DataSetup}
  */
-export const convertOptionsStringToObject = (
-  optionsJsonString: string | null
-): VideoJsPlayerOptions => {
-  let options = {} as VideoJsPlayerOptions;
-  if (!optionsJsonString) {
-    return options;
+export const convertJSONStringToObject = (
+  input: string | null | object
+): DataSetup => {
+  let options = {} as DataSetup;
+  // if typeof input is an object, return it
+  if (typeof input === 'object') {
+    return input as DataSetup;
   }
-  if (typeof optionsJsonString === 'string') {
-    // validate that it's a valid json string
-    try {
-      options = JSON.parse(optionsJsonString) as VideoJsPlayerOptions;
-    } catch (e) {
-      console.error('ix-video: invalid video.js dataSetup options json string');
-      console.error('ix-video: ' + e);
-    }
+  // otherwise, attempt to parse it as JSON
+  try {
+    options = JSON.parse(input) as DataSetup;
+  } catch (e) {
+    console.error('ix-video: invalid video.js dataSetup options json string');
+    console.error('ix-video: ' + e);
   }
   return options;
 };
