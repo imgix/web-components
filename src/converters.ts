@@ -1,10 +1,10 @@
 import {DataSetup} from './types';
 /**
- * Validate dataSetup JSON string & convert it to a VideoJsPlayerOptions object.
+ * Validate dataSetup JSON string & convert it to a DataSetup object.
  * @param value
  * @returns {DataSetup}
  */
-export const convertJSONStringToObject = (
+export const convertDataSetupStringToObject = (
   input: string | null | object
 ): DataSetup => {
   let options = {} as DataSetup;
