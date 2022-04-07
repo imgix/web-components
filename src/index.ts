@@ -1,1 +1,1 @@
-export {IxVideo} from './ix-video';
+export {IxVideo} from './elements/ix-video';
