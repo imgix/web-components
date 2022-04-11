@@ -7,6 +7,18 @@ import {convertDataSetupStringToObject} from '~/converters';
 import {generateUid} from '~/helpers';
 import {DataSetup} from '~/types';
 
+/**
+ * ix-video is a custom element that can be used to display a video.
+ * It wraps the video.js player in a LitElement.
+ * @class IxVideo
+ * @extends {LitElement}
+ * @property {string} controls - Whether or not the video should display controls. Defaults to false.
+ * @property {string} dataSetup - A dataSetup JSON string used by video.js. Defaults to an empty string.
+ * @property {string} height - The height of the video. Defaults to an empty string.
+ * @property {string} type - The type of the video. Default: 'application/x-mpegURL'.
+ * @property {string} source - The source URL of the video.
+ * @property {string} width - The width of the video. Defaults to an empty string.
+ */
 @customElement('ix-video')
 export class IxVideo extends LitElement {
   videoRef = createRef<HTMLVideoElement>();
