@@ -4,7 +4,11 @@ import {createRef, ref} from 'lit/directives/ref.js';
 import videojs, {VideoJsPlayerOptions} from 'video.js';
 import 'video.js/dist/video-js.css';
 import {convertDataSetupStringToObject} from '~/converters';
-import {generateUid} from '~/helpers';
+import {
+  buildAttributeMap,
+  generateUid,
+  spreadHostAttributesToElement,
+} from '~/helpers';
 import {DataSetup} from '~/types';
 
 /**
@@ -73,6 +77,43 @@ export class IxVideo extends LitElement {
   @state()
   uid = generateUid();
 
+  /**
+   * Build the video.js player options object.
+   * @returns {DataSetup} video.js player options object;
+   */
+  _buildOptions(): DataSetup {
+    const {controls, height, source, type, width} = this;
+    return {
+      controls,
+      height,
+      sources: source ? [{src: source, type}] : [],
+      width,
+    } as DataSetup;
+  }
+
+  /**
+   * Set all the attributes defined on the `<ix-video>` element and not on the
+   * `<video>` element to the `<video>` element.
+   *
+   * We do this because we want to support all `<video>` attributes but
+   * we don't want to override the custom element's attributes.
+   *
+   * @returns void;
+   */
+  _spreadHostAttributesToPlayer(player: HTMLVideoElement) {
+    const attributeMap = buildAttributeMap(this);
+    const excludeList = [
+      'controls',
+      'dataSetup',
+      'height',
+      'source',
+      'style',
+      'type',
+      'width',
+    ];
+    spreadHostAttributesToElement(attributeMap, player, excludeList);
+  }
+
   override render() {
     return html`
       <video
@@ -118,27 +159,9 @@ export class IxVideo extends LitElement {
 
   override firstUpdated(): void {
     const player = this.videoRef?.value as HTMLVideoElement;
-    /**
-     * The options set here will override any options set in the dataSetup
-     * attribute.
-     *
-     * The `sources` array mimics the `<video>` tag's `<source>` tag. The first
-     * source in the array will be the default source.
-     */
-    const options = {
-      controls: this.controls,
-      height: this.height,
-      sources: [
-        {
-          src: this.source,
-          type: this.type,
-        },
-      ],
-      width: this.width,
-    } as DataSetup;
-
-    console.info('ix-video: options', options);
-
+    this._spreadHostAttributesToPlayer(player);
+    const options = this._buildOptions();
+    // The options set here will override the dataSetup options.
     videojs(player, options as VideoJsPlayerOptions, () => {
       videojs.log('ix-video: player ready');
     });
