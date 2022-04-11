@@ -5,10 +5,3 @@ export interface DataSetup
   width: number | string;
   height: number | string;
 }
-
-export interface AttributeOptions {
-  source: string;
-  controls: boolean;
-  width: string;
-  height: string;
-}
