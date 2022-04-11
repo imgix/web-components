@@ -73,16 +73,6 @@ export class IxVideo extends LitElement {
     `;
   }
 
-  /**
-   * Invoked when the element is added to the page, useful for setup work which
-   * requires access to the DOM. However, the element has not done it's initial
-   * render here yet.
-   *
-   * In `connectedCallback()` you should setup tasks that should only occur when
-   * the element is connected to the document.
-   *
-   * @category lifecycle
-   */
   override connectedCallback() {
     super.connectedCallback();
 
@@ -90,10 +80,8 @@ export class IxVideo extends LitElement {
     const componentWidth = this.width || dataSetup.width?.toString();
 
     if (componentWidth) {
-      // update the host to match the video player size
-      this.style.width = componentWidth;
-      // update the width attribute to match the video player size
-      this.width = componentWidth;
+      this.style.width = componentWidth; // update the host element width
+      this.width = componentWidth; // update the video element width
     } else {
       /**
        * When the `width` and `height` properties are not set, we want to mimic
@@ -102,38 +90,20 @@ export class IxVideo extends LitElement {
        * Because our player is contained inside a custom element, we need to
        * manually set the width of the host _and_ the video element to be 100%
        * of the containing element.
-       */
-
-      // update the host width to be 100% of the containing element
-      this.style.width = '100%';
-      /**
-       * videojs doesn't understand percentages, instead we approximate the
-       * 100% width by setting the value to the element's offsetWidth.
-       */
-      const offsetWidth = this.offsetWidth.toString();
-      /**
-       * If the offsetWidth is 0, in other words there is not measurable
+       *
+       * Because videojs doesn't understand percentages, instead we approximate
+       * 100% width value by setting the value to the element's offsetWidth.
+       *
+       * If the offsetWidth is 0, in other words there is no measurable
        * containing element height, we don't set a width value at all. This
        * allows VideoJS to fallback to rendering the video at its original size.
        */
-      this.width = offsetWidth === '0' ? '' : offsetWidth;
+      this.style.width = '100%'; // update the host element width
+      const offsetWidth = this.offsetWidth.toString();
+      this.width = offsetWidth === '0' ? '' : offsetWidth; // update video width
     }
   }
 
-  /**
-   * Invoked when the element is first updated. Implement to perform one time
-   * work on the element after update.
-   *
-   * Setting properties inside this method will trigger the element to update
-   * again after this update cycle completes.
-   *
-   * @param _changedProperties Map of changed properties with old values
-   * @category updates
-   * @example
-   * firstUpdated() {
-   *   this.renderRoot.getElementById('my-text-area').focus();
-   * }
-   */
   override firstUpdated(): void {
     const player = this.videoRef?.value as HTMLVideoElement;
     /**
@@ -162,22 +132,9 @@ export class IxVideo extends LitElement {
     });
   }
 
-  /**
-   * The default implementation of createRenderRoot creates an open shadow root
-   * and adds to it any styles set in the static styles class field.
-   *
-   * To customize a component's render root, we implement createRenderRoot and
-   * return the node you want the template to render into.
-   * @category rendering
-   */
   protected override createRenderRoot() {
     /**
-     * This removes the shadow root and renders the elements as children of the
-     * host element.
-     *
-     * This in turn removes our ability to use `css` and `cssPart`
-     * in Lit. Our element  will not have access to DOM or style scoping, and
-     * it will not be able to compose elements into its internal DOM.
+     * Remove the shadow root and renders the elements as children of the host.
      *
      * This is necessary because Video.js assumes access to the parent document.
      * Moreover, Video.js also uses custom `@fontface` rules, which are not
