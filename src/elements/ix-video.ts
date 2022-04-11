@@ -7,9 +7,6 @@ import {convertDataSetupStringToObject} from '~/converters';
 import {generateUid} from '~/helpers';
 import {DataSetup} from '~/types';
 
-/**
- * @csspart video - The video element
- */
 @customElement('ix-video')
 export class IxVideo extends LitElement {
   videoRef = createRef<HTMLVideoElement>();
