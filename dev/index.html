@@ -7,9 +7,11 @@
     <title>Document</title>
   </head>
   <body>
+    <!-- Players inside a container -->
     <!-- HLS video that fills container -->
     <div style="display: flex; width: 480px; height: 255px">
       <ix-video
+        data-test-id="ix-video-with-container"
         source="https://assets.imgix.video/videos/girl-reading-book-in-library.mp4"
         controls
       ></ix-video>
@@ -17,45 +19,58 @@
     <!-- HLS video with extra attribute -->
     <div style="display: flex; width: 480px; height: 255px">
       <ix-video
+        data-test-id="ix-video-with-video-attributes"
         source="https://assets.imgix.video/videos/girl-reading-book-in-library.mp4"
         controls
         autoplay
+        disablePictureInPicture
+        loop
+        muted
       ></ix-video>
     </div>
     <!-- HLS video with no w attribute fills container w -->
-    <div style="display: flex; width: 480px; height: 255px">
+    <div
+      data-test-id="without-w-container"
+      style="display: flex; width: 480px; height: 255px"
+    >
       <ix-video
+        data-test-id="ix-video-without-w"
         source="https://assets.imgix.video/videos/girl-reading-book-in-library.mp4"
         controls
         height="255"
       ></ix-video>
     </div>
-    <!-- HLS video with w/h attributes -->
-    <ix-video
-      source="https://assets.imgix.video/videos/girl-reading-book-in-library.mp4"
-      controls
-      width="480"
-      height="255"
-    ></ix-video>
-    <!-- HLS video without w/h attributes -->
-    <ix-video
-      source="https://assets.imgix.video/videos/girl-reading-book-in-library.mp4"
-      controls
-    ></ix-video>
-    <!-- HLS video with dataSetup -->
-    <ix-video
-      source="https://assets.imgix.video/videos/girl-reading-book-in-library.mp4"
-      controls
-      dataSetup='{"width": 480}'
-    ></ix-video>
     <!-- MP4 video that fills container -->
     <div style="display: flex; width: 480px; height: 255px">
       <ix-video
+        data-test-id="ix-video-mp4-player"
         source="https://assets.imgix.net/videos/girl-reading-book-in-library.mp4"
         controls
         type="video/mp4"
       ></ix-video>
     </div>
+    <!-- Players without a container -->
+    <!-- HLS video with w/h attributes -->
+    <ix-video
+      data-test-id="ix-video-with-w-and-h"
+      source="https://assets.imgix.video/videos/girl-reading-book-in-library.mp4"
+      controls
+      width="481"
+      height="256"
+    ></ix-video>
+    <!-- HLS video without w/h attributes -->
+    <ix-video
+      data-test-id="ix-video-without-w-or-h"
+      source="https://assets.imgix.video/videos/girl-reading-book-in-library.mp4"
+      controls
+    ></ix-video>
+    <!-- HLS video with dataSetup -->
+    <ix-video
+      data-test-id="ix-video-with-dataSetup"
+      source="https://assets.imgix.video/videos/girl-reading-book-in-library.mp4"
+      controls
+      dataSetup='{"width": 480}'
+    ></ix-video>
     <script type="module" src="./main.ts"></script>
   </body>
 </html>
