@@ -1,6 +1,103 @@
-# imgix/shared-wc
+# imgix/web-components
 
 imgix SDK team Web Component library.
+
+# Install
+
+> Note: this package has not yet been published so these example are not yet usable
+
+Install this package in your project:
+
+```bash
+npm i @imgix/web-components
+```
+
+Or
+
+```bash
+yarn add @imgix/web-components
+```
+
+# Usage
+
+This library exports a collection of Web Components. Bellow is an example of how
+to import and use the `IxVideo` web-component in your project.
+
+To use the library in your project:
+
+### React
+
+```jsx
+import {IxVideo} from `@imgix/web-components`;
+import { createComponent } from "@lit-labs/react";
+// ... wrap the component with Lit's React wrapper
+export const Video = createComponent(React, "ix-video", IxVideo, {
+  onactivate: "activate",
+  onchange: "change",
+});
+// ... use the component
+function App() {
+  return (
+    <div className="App">
+        <div style={{ height: 500, width: 500 }}>
+          <Video
+            width="480"
+            height="255"
+            controls
+            source="https://assets.imgix.video/videos/girl-reading-book-in-library.mp4"
+          />
+        </div>
+    </div>
+  );
+}
+
+export default App;
+```
+
+### Vue
+
+```html
+<script setup>
+  import {IxVideo} from '@imgix/shared-wc';
+</script>
+
+<template>
+  <div
+    style="width: 500px; height: 500px; display: flex; justify-content: center; margin: auto"
+  >
+    <ix-video
+      width="480"
+      height="255"
+      controls
+      source="https://assets.imgix.video/videos/girl-reading-book-in-library.mp4"
+    ></ix-video>
+  </div>
+</template>
+```
+
+Vue might show some warnings in the console if you don't declare your custom
+element in it's configuration. To turn these warnings off, add the following:
+
+```js
+//vite.config.js
+import vue from '@vitejs/plugin-vue';
+import {defineConfig} from 'vite';
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [
+    vue({
+      template: {
+        compilerOptions: {
+          isCustomElement: (name) => name.startsWith('ix-'),
+        },
+      },
+    }),
+  ],
+});
+```
+
+# Development
 
 ## Setup
 
@@ -30,13 +127,9 @@ Both the TypeScript compiler and lit-analyzer are configured to be very strict. 
 
 ## Testing
 
-This repo uses modern-web.dev's
-[@web/test-runner](https://www.npmjs.com/package/@web/test-runner) along with
-Mocha, Chai, and some related helpers for testing. See the
-[modern-web.dev testing documentation](https://modern-web.dev/docs/test-runner/overview) for
-more information.
+This repo uses Cypress to run e2e tests.
 
-Tests can be run with the `test` script, which will run your tests against Lit's development mode (with more verbose errors) as well as against Lit's production mode:
+Tests can be run with the `test` script, which will run your tests against Lit's development mode (with more verbose errors):
 
 ```bash
 npm test
@@ -48,19 +141,19 @@ For local testing during development, the `test:dev:watch` command will run your
 npm test:watch
 ```
 
-Alternatively the `test:prod` and `test:prod:watch` commands will run your tests in Lit's production mode.
+Alternatively the `test:prod` command will run your tests in Lit's production mode.
 
 ## Dev Server
 
-This repo uses modern-web.dev's [@web/dev-server](https://www.npmjs.com/package/@web/dev-server) for previewing the project without additional build steps. Web Dev Server handles resolving Node-style "bare" import specifiers, which aren't supported in browsers. It also automatically transpiles JavaScript and adds polyfills to support older browsers. See [modern-web.dev's Web Dev Server documentation](https://modern-web.dev/docs/dev-server/overview/) for more information.
+This repo uses Vite to bundle and serve the component files for local development.
 
 To run the dev server and open the project in a new browser tab:
 
 ```bash
-npm run serve
+npm run dev
 ```
 
-There is a development HTML file located at `/dev/index.html` that you can view at http://localhost:8000/dev/index.html. Note that this command will serve your code using Lit's development mode (with more verbose errors). To serve your code against Lit's production mode, use `npm run serve:prod`.
+There is a development HTML file located at `/dev/index.html` that you can view at http://localhost:3000/dev/index.html. Note that this command will serve your code using Lit's development mode (with more verbose errors). To serve your code against Lit's production mode, use `npm run dev:prod`.
 
 ## Editing
 
@@ -94,38 +187,8 @@ npm run lint
 
 Prettier has not been configured to run when committing files, but this can be added with Husky and and `pretty-quick`. See the [prettier.io](https://prettier.io/) site for instructions.
 
-## Static Site
-
-This project includes a simple website generated with the [eleventy](11ty.dev) static site generator and the templates and pages in `/docs-src`. The site is generated to `/docs` and intended to be checked in so that GitHub pages can serve the site [from `/docs` on the master branch](https://help.github.com/en/github/working-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site).
-
-To enable the site go to the GitHub settings and change the GitHub Pages &quot;Source&quot; setting to &quot;master branch /docs folder&quot;.</p>
-
-To build the site, run:
-
-```bash
-npm run docs
-```
-
-To serve the site locally, run:
-
-```bash
-npm run docs:serve
-```
-
-To watch the site files, and re-build automatically, run:
-
-```bash
-npm run docs:watch
-```
-
-The site will usually be served at http://localhost:8000.
-
 ## Bundling and minification
 
-This starter project doesn't include any build-time optimizations like bundling or minification. We recommend publishing components as unoptimized JavaScript modules, and performing build-time optimizations at the application level. This gives build tools the best chance to deduplicate code, remove dead code, and so on.
-
-For information on building application projects that include LitElement components, see [Build for production](https://lit.dev/docs/tools/production/) on the Lit site.
-
-## More information
-
-See [Get started](https://lit.dev/docs/getting-started/) on the Lit site for more information.
+This project uses Rollup to bundle and minify the TypeScript component files
+into a single file in `dist/`. THe rollup config is located at
+`rollup.config.js`.
