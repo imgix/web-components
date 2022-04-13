@@ -16,11 +16,11 @@ import {DataSetup} from '~/types';
  * It wraps the video.js player in a LitElement.
  * @class IxVideo
  * @extends {LitElement}
+ * @property {string} source - Required. The source URL of the video.
  * @property {string} controls - Whether or not the video should display controls. Defaults to false.
  * @property {string} dataSetup - A dataSetup JSON string used by video.js. Defaults to an empty string.
  * @property {string} height - The height of the video. Defaults to an empty string.
  * @property {string} type - The type of the video. Default: 'application/x-mpegURL'.
- * @property {string} source - The source URL of the video.
  * @property {string} width - The width of the video. Defaults to an empty string.
  */
 @customElement('ix-video')
@@ -162,6 +162,7 @@ export class IxVideo extends LitElement {
     this._spreadHostAttributesToPlayer(player);
     const options = this._buildOptions();
     // The options set here will override the dataSetup options.
+    // Video.js will take care of merging the two for us.
     videojs(player, options as VideoJsPlayerOptions, () => {
       videojs.log('ix-video: player ready');
     });
