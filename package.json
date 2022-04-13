@@ -53,11 +53,14 @@
     "@custom-elements-manifest/analyzer": "^0.5.7",
     "@cypress/vite-dev-server": "^2.2.2",
     "@esm-bundle/chai": "^4.1.5",
+    "@google/semantic-release-replace-plugin": "^1.1.0",
     "@open-wc/testing": "^3.0.0-next.1",
     "@open-wc/testing-karma": "^4.0.9",
     "@rollup/plugin-commonjs": "^21.0.2",
     "@rollup/plugin-node-resolve": "^13.0.4",
     "@rollup/plugin-replace": "^3.0.0",
+    "@semantic-release/changelog": "^6.0.1",
+    "@semantic-release/git": "^10.0.1",
     "@types/mocha": "^9.0.0",
     "@types/video.js": "^7.3.32",
     "@typescript-eslint/eslint-plugin": "^4.3.0",
@@ -76,8 +79,148 @@
     "rollup-plugin-summary": "^1.2.3",
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-ts": "^2.0.5",
+    "semantic-release": "^19.0.2",
     "typescript": "^4.3.5",
     "vite": "^2.9.1"
+  },
+  "release": {
+    "branches": [
+      "main",
+      {
+        "name": "next",
+        "prerelease": "rc"
+      },
+      {
+        "name": "beta",
+        "prerelease": true
+      },
+      {
+        "name": "alpha",
+        "prerelease": true
+      }
+    ],
+    "plugins": [
+      [
+        "@semantic-release/commit-analyzer",
+        {
+          "releaseRules": [
+            {
+              "type": "docs",
+              "release": "patch"
+            },
+            {
+              "type": "deps",
+              "scope": "deps",
+              "release": "patch"
+            }
+          ]
+        }
+      ],
+      [
+        "@semantic-release/release-notes-generator",
+        {
+          "preset": "conventionalcommits",
+          "writerOpts": {
+            "types": [
+              {
+                "type": "feat",
+                "section": "Features"
+              },
+              {
+                "type": "fix",
+                "section": "Bug Fixes"
+              },
+              {
+                "type": "docs",
+                "section": "Documentation",
+                "hidden": false
+              },
+              {
+                "type": "deps",
+                "section": "Dependency Updates",
+                "hidden": false
+              },
+              {
+                "type": "chore",
+                "hidden": true
+              },
+              {
+                "type": "style",
+                "hidden": true
+              },
+              {
+                "type": "refactor",
+                "hidden": true
+              },
+              {
+                "type": "perf",
+                "hidden": true
+              },
+              {
+                "type": "test",
+                "hidden": true
+              }
+            ]
+          }
+        }
+      ],
+      [
+        "@google/semantic-release-replace-plugin",
+        {
+          "replacements": [
+            {
+              "files": [
+                "src/version.ts"
+              ],
+              "from": "const VERSION = '.*'",
+              "to": "const VERSION = '${nextRelease.version}'",
+              "results": [
+                {
+                  "file": "src/version.ts",
+                  "hasChanged": true,
+                  "numMatches": 1,
+                  "numReplacements": 1
+                }
+              ],
+              "countMatches": true
+            }
+          ]
+        }
+      ],
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "src/**",
+            "dist/**/*.js",
+            "package.json",
+            "changelog.md"
+          ],
+          "message": "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}"
+        }
+      ],
+      [
+        "@semantic-release/github",
+        {
+          "assets": [
+            {
+              "path": "dist/index.bundled.js",
+              "label": "UMD/CJS build"
+            },
+            {
+              "path": "dist/index.bundled.ts.map",
+              "label": "UMD/CJS build sourcemap"
+            },
+            {
+              "path": "dist/custom-elements.json",
+              "label": "custom-elements manifest"
+            }
+          ]
+        }
+      ]
+    ]
   },
   "customElements": "custom-elements.json"
 }
