@@ -1,5 +1,6 @@
 import {resolve} from 'path';
-import {defineConfig} from 'vite';
+import pkg from 'vite';
+const {defineConfig} = pkg;
 
 export default defineConfig({
   publicDir: false,
@@ -21,9 +22,5 @@ export default defineConfig({
         return `index.bundled.${format}.js`;
       },
     },
-  },
-  test: {
-    globals: true,
-    environment: 'happy-dom',
   },
 });

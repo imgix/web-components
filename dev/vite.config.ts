@@ -1,6 +1,7 @@
-import { resolve } from 'path';
-import { defineConfig } from 'vite';
+import {resolve} from 'path';
+import pkg from 'vite';
 import viteConfig from '../vite.config';
+const {defineConfig} = pkg;
 
 export default defineConfig({
   ...viteConfig,
