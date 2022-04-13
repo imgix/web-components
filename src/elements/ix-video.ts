@@ -110,6 +110,7 @@ export class IxVideo extends LitElement {
       'style',
       'type',
       'width',
+      'data-test-id',
     ];
     spreadHostAttributesToElement(attributeMap, player, excludeList);
   }
