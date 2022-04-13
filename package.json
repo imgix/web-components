@@ -1,6 +1,5 @@
 {
   "name": "@imgix/web-components",
-  "private": true,
   "version": "0.0.1",
   "description": "imgix Web Components library",
   "main": "dist/index.bundled.js",
