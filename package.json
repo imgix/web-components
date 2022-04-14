@@ -6,7 +6,7 @@
   "module": "dist/index.bundled.js",
   "type": "module",
   "scripts": {
-    "build": "rollup -c rollup.config.js",
+    "build": "rollup -c rollup.config.mjs",
     "build:watch": "rollup -c rollup.config.js --watch",
     "dev": "vite --config ./dev/vite.config.ts",
     "dev:prod": "vite --mode production --config ./dev/vite.config.ts",
