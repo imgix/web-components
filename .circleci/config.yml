@@ -9,6 +9,7 @@ jobs:
     steps:
       - checkout
       - node/install-packages:
+          pkg-manager: npm
       - run: npm run build
       - run: npx semantic-release
 workflows:
