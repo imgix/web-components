@@ -9,8 +9,7 @@ jobs:
     steps:
       - checkout
       - node/install-packages:
-          pkg-manager: yarn
-      - run: yarn build
+      - run: npm run build
       - run: npx semantic-release
 workflows:
   build:
