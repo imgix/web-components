@@ -2,6 +2,7 @@ const BIG_PLAY_BUTTON_SELECTOR = `.vjs-big-play-button`;
 const PLAY_BUTTON_SELECTOR = `.vjs-play-control`;
 const MUTE_BUTTON_SELECTOR = `.vjs-mute-control `;
 const PIP_BUTTON_SELECTOR = `.vjs-picture-in-picture-control`;
+const PLAYBACK_RATE_BUTTON_SELECTOR = `.vjs-playback-rate`;
 
 const PLAYER_WITH_CONTAINER = `[data-test-id=ix-video-with-container]`;
 const PLAYER_WITH_CONTAINER_WITHOUT_W = `[data-test-id=ix-video-without-w]`;
@@ -36,10 +37,6 @@ context('ix-video', () => {
 
   it('should have a video element', () => {
     cy.get(player).should('exist');
-  });
-
-  it('should await for video.js instance to mount player', () => {
-    cy.get(player).should('have.attr', 'data-setup');
   });
 
   it('should display video controls', () => {
@@ -121,10 +118,6 @@ context('ix-video', () => {
       cy.get(player).should('exist');
     });
 
-    it('should await for video.js instance to mount player', () => {
-      cy.get(player).should('have.attr', 'data-setup');
-    });
-
     it('should display video controls', () => {
       cy.get(bigPLayButton).should('exist');
     });
@@ -199,7 +192,8 @@ context('ix-video', () => {
     const bigPLayButton = `${host} ${BIG_PLAY_BUTTON_SELECTOR}`;
     const playButton = `${host} ${PLAY_BUTTON_SELECTOR}`;
     const muteButton = `${host} ${MUTE_BUTTON_SELECTOR}`;
-    const pipButton = `${host} ${PIP_BUTTON_SELECTOR}`;
+    const playbackRateButton = `${host} ${PLAYBACK_RATE_BUTTON_SELECTOR} button`;
+    const playbackRateValue = `${host} ${PLAYBACK_RATE_BUTTON_SELECTOR} > .vjs-playback-rate-value`;
 
     it('should render', () => {
       cy.get(host).should('exist');
@@ -207,10 +201,6 @@ context('ix-video', () => {
 
     it('should have a video element', () => {
       cy.get(player).should('exist');
-    });
-
-    it('should await for video.js instance to mount player', () => {
-      cy.get(player).should('have.attr', 'data-setup');
     });
 
     it('should display video controls', () => {
@@ -236,6 +226,12 @@ context('ix-video', () => {
       cy.get(muteButton).should('have.attr', 'title', 'Mute');
       cy.get(muteButton).click();
       cy.get(muteButton).should('have.attr', 'title', 'Unmute');
+    });
+
+    it('should select playback rate on click', () => {
+      cy.get(playbackRateButton).should('have.attr', 'title', 'Playback Rate');
+      cy.get(playbackRateButton).click();
+      cy.get(playbackRateValue).should('have.text', '1.5x');
     });
   });
 });
