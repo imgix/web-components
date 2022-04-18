@@ -60,7 +60,9 @@ export class IxVideo extends LitElement {
   width = '';
 
   /**
-   * Video.js dataSetup options json string.
+   * Video.js data-setup options json string. Users should not set them same
+   * options on both on the element and in data-setup. If they do, data-setup
+   * takes precedence.
    * @see https://docs.videojs.com/tutorial-options.html
    */
   @property({
@@ -77,7 +79,7 @@ export class IxVideo extends LitElement {
    */
   @state()
   uid = generateUid();
-  sources = [] as DataSetup['sources'];
+  options = {} as DataSetup;
 
   /**
    * Set all the attributes defined on the `<ix-video>` element and not on the
@@ -103,11 +105,33 @@ export class IxVideo extends LitElement {
     spreadHostAttributesToElement(attributeMap, player, excludeList);
   }
 
-  _setPlayerWidth(componentWidth: string) {
-    if (componentWidth) {
-      this.style.width = componentWidth; // update the host element width
-      this.width = componentWidth; // update the video element width
-    } else {
+  override render() {
+    return html`
+      <video
+        ${ref(this.videoRef)}
+        class="video-js vjs-default-skin"
+        id="ix-video-${this.uid}"
+        part="video"
+      ></video>
+    `;
+  }
+
+  override firstUpdated(): void {
+    const player = this.videoRef?.value as HTMLVideoElement;
+    const dataSetup = convertDataSetupStringToObject(this.dataSetup);
+    const options = {
+      width: this.width,
+      height: this.height,
+      controls: this.controls,
+      sources: [{src: this.source, type: this.type}],
+    };
+    // Merge the data-setup options with the element options. This allows
+    // users to set VJS-specific options on the element. We assume users will not
+    // set the same option twice, and explain as much in the docs.
+    this.options = {...options, ...dataSetup};
+    this._spreadHostAttributesToPlayer(player);
+
+    if (!this.options.width) {
       /**
        * When the `width` and `height` properties are not set, we want to mimic
        * video.js' ability to take up 100% of the containing elements w/h.
@@ -124,53 +148,10 @@ export class IxVideo extends LitElement {
        * allows VideoJS to fallback to rendering the video at its original size.
        */
       this.style.width = '100%'; // update the host element width
-      const offsetWidth = this.offsetWidth.toString();
-      this.width = offsetWidth === '0' ? '' : offsetWidth; // update video width
+      this.options.width = this.offsetWidth || ''; // update the video element width
     }
-  }
 
-  override render() {
-    return html`
-      <video
-        ${ref(this.videoRef)}
-        class="video-js vjs-default-skin"
-        id="ix-video-${this.uid}"
-        part="video"
-        data-setup=${this.dataSetup}
-      ></video>
-    `;
-  }
-
-  override connectedCallback() {
-    super.connectedCallback();
-
-    // Parse the dataSetup JSON string into an object
-    const dataSetup: DataSetup = convertDataSetupStringToObject(this.dataSetup);
-    // Fallback to dataSetup for attributes if they are not defined on the element
-    const componentWidth = this.width || dataSetup.width?.toString() || '';
-    const componentControls = this.controls || dataSetup.controls || false;
-    const componentSources = this.source
-      ? [
-          {
-            src: this.source,
-            type: this.type,
-          },
-        ]
-      : dataSetup.sources || [];
-    // Update the component's attributes with the new values
-    this._setPlayerWidth(componentWidth);
-    this.sources = componentSources;
-    this.controls = componentControls;
-  }
-
-  override firstUpdated(): void {
-    const player = this.videoRef?.value as HTMLVideoElement;
-    this._spreadHostAttributesToPlayer(player);
-    const {controls, height, sources, width} = this;
-    const options = {controls, height, sources, width} as DataSetup;
-    // The options set here will override the dataSetup options.
-    // Video.js will take care of merging the two for us.
-    videojs(player, options as VideoJsPlayerOptions, () => {
+    videojs(player, this.options as VideoJsPlayerOptions, () => {
       videojs.log('ix-video: player ready');
     });
   }
