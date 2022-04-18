@@ -9,6 +9,7 @@ const PLAYER_WITHOUT_W_OR_H = `[data-test-id=ix-video-without-w-or-h]`;
 const PLAYER_WITH_WIDTH_AND_HEIGHT = `[data-test-id=ix-video-with-w-and-h]`;
 const PLAYER_WITH_CONTAINER_VIDEO_ATT = `[data-test-id=ix-video-with-video-attributes]`;
 const PLAYER_WITH_CONTAINER_MP4 = `[data-test-id=ix-video-mp4-player]`;
+const PLAYER_WITH_DATA_SETUP = `[data-test-id=ix-video-with-dataSetup]`;
 
 /**
  * TODO:
@@ -190,5 +191,80 @@ context('ix-video', () => {
         cy.get(player).should('have.attr', 'loop');
       });
     });
+  });
+
+  describe('with dataSetup attribute', () => {
+    const host = PLAYER_WITH_DATA_SETUP;
+    const player = `${host} video`;
+    const bigPLayButton = `${host} ${BIG_PLAY_BUTTON_SELECTOR}`;
+    const playButton = `${host} ${PLAY_BUTTON_SELECTOR}`;
+    const muteButton = `${host} ${MUTE_BUTTON_SELECTOR}`;
+    const pipButton = `${host} ${PIP_BUTTON_SELECTOR}`;
+
+    it('should render', () => {
+      cy.get(host).should('exist');
+    });
+
+    it('should have a video element', () => {
+      cy.get(player).should('exist');
+    });
+
+    it('should await for video.js instance to mount player', () => {
+      cy.get(player).should('have.attr', 'data-setup');
+    });
+
+    it('should display video controls', () => {
+      cy.get(bigPLayButton).should('exist');
+    });
+
+    it('should display large play button on first render', () => {
+      cy.get(bigPLayButton).should('exist');
+    });
+
+    it('should display video controls after clicking play', () => {
+      cy.get(bigPLayButton).click();
+      cy.get(bigPLayButton).should('have.css', 'display', 'none');
+    });
+
+    it('should toggle play/pause on click', () => {
+      cy.get(playButton).should('have.attr', 'title', 'Pause');
+      cy.get(playButton).click();
+      cy.get(playButton).should('have.attr', 'title', 'Play');
+    });
+
+    it('should toggle mute the video on click', () => {
+      cy.get(muteButton).should('have.attr', 'title', 'Mute');
+      cy.get(muteButton).click();
+      cy.get(muteButton).should('have.attr', 'title', 'Unmute');
+    });
+
+    // describe('width disablePictureInPicture', () => {
+    //   it('should not display picture in picture button', () => {
+    //     cy.get(pipButton).should('have.attr', 'title', 'Picture-in-Picture');
+    //     cy.get(pipButton).should('have.attr', 'aria-disabled', 'true');
+    //   });
+    // });
+
+    // describe('with autoplay', () => {
+    //   it('should autoplay', () => {
+    //     cy.get(host).should('have.attr', 'autoplay');
+    //     cy.get(player).should('have.attr', 'autoplay');
+    //     cy.get(bigPLayButton).should('have.css', 'display', 'none');
+    //     cy.get(playButton).should('have.attr', 'title', 'Pause');
+    //   });
+    // });
+
+    // describe('with muted', () => {
+    //   it('should be muted', () => {
+    //     cy.get(muteButton).should('have.attr', 'title', 'Unmute');
+    //   });
+    // });
+
+    // describe('with loop', () => {
+    //   it('should loop', () => {
+    //     cy.get(host).should('have.attr', 'loop');
+    //     cy.get(player).should('have.attr', 'loop');
+    //   });
+    // });
   });
 });
