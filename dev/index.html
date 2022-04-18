@@ -67,9 +67,7 @@
     <!-- HLS video with dataSetup -->
     <ix-video
       data-test-id="ix-video-with-dataSetup"
-      source="https://assets.imgix.video/videos/girl-reading-book-in-library.mp4"
-      controls
-      dataSetup='{"width": 480}'
+      dataSetup='{"controls": "true", "width": 800, "sources": [{"src": "https://assets.imgix.video/videos/girl-reading-book-in-library.mp4", "type": "application/x-mpegURL"}]}'
     ></ix-video>
     <script type="module" src="./main.ts"></script>
   </body>
