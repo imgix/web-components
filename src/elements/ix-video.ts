@@ -65,6 +65,7 @@ export class IxVideo extends LitElement {
    */
   @property({
     type: String,
+    attribute: 'data-setup',
   })
   dataSetup = '{}';
 
