@@ -76,20 +76,7 @@ export class IxVideo extends LitElement {
    */
   @state()
   uid = generateUid();
-
-  /**
-   * Build the video.js player options object.
-   * @returns {DataSetup} video.js player options object;
-   */
-  _buildOptions(): DataSetup {
-    const {controls, height, source, type, width} = this;
-    return {
-      controls,
-      height,
-      sources: source ? [{src: source, type}] : [],
-      width,
-    } as DataSetup;
-  }
+  sources = [] as DataSetup['sources'];
 
   /**
    * Set all the attributes defined on the `<ix-video>` element and not on the
@@ -115,24 +102,7 @@ export class IxVideo extends LitElement {
     spreadHostAttributesToElement(attributeMap, player, excludeList);
   }
 
-  override render() {
-    return html`
-      <video
-        ${ref(this.videoRef)}
-        class="video-js vjs-default-skin"
-        id="ix-video-${this.uid}"
-        part="video"
-        data-setup=${this.dataSetup}
-      ></video>
-    `;
-  }
-
-  override connectedCallback() {
-    super.connectedCallback();
-
-    const dataSetup: DataSetup = convertDataSetupStringToObject(this.dataSetup);
-    const componentWidth = this.width || dataSetup.width?.toString();
-
+  _setPlayerWidth(componentWidth: string) {
     if (componentWidth) {
       this.style.width = componentWidth; // update the host element width
       this.width = componentWidth; // update the video element width
@@ -158,10 +128,45 @@ export class IxVideo extends LitElement {
     }
   }
 
+  override render() {
+    return html`
+      <video
+        ${ref(this.videoRef)}
+        class="video-js vjs-default-skin"
+        id="ix-video-${this.uid}"
+        part="video"
+        data-setup=${this.dataSetup}
+      ></video>
+    `;
+  }
+
+  override connectedCallback() {
+    super.connectedCallback();
+
+    // Parse the dataSetup JSON string into an object
+    const dataSetup: DataSetup = convertDataSetupStringToObject(this.dataSetup);
+    // Fallback to dataSetup for attributes if they are not defined on the element
+    const componentWidth = this.width || dataSetup.width?.toString() || '';
+    const componentControls = this.controls || dataSetup.controls || false;
+    const componentSources = this.source
+      ? [
+          {
+            src: this.source,
+            type: this.type,
+          },
+        ]
+      : dataSetup.sources || [];
+    // Update the component's attributes with the new values
+    this._setPlayerWidth(componentWidth);
+    this.sources = componentSources;
+    this.controls = componentControls;
+  }
+
   override firstUpdated(): void {
     const player = this.videoRef?.value as HTMLVideoElement;
     this._spreadHostAttributesToPlayer(player);
-    const options = this._buildOptions();
+    const {controls, height, sources, width} = this;
+    const options = {controls, height, sources, width} as DataSetup;
     // The options set here will override the dataSetup options.
     // Video.js will take care of merging the two for us.
     videojs(player, options as VideoJsPlayerOptions, () => {
