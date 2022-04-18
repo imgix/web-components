@@ -9,7 +9,7 @@ const PLAYER_WITHOUT_W_OR_H = `[data-test-id=ix-video-without-w-or-h]`;
 const PLAYER_WITH_WIDTH_AND_HEIGHT = `[data-test-id=ix-video-with-w-and-h]`;
 const PLAYER_WITH_CONTAINER_VIDEO_ATT = `[data-test-id=ix-video-with-video-attributes]`;
 const PLAYER_WITH_CONTAINER_MP4 = `[data-test-id=ix-video-mp4-player]`;
-const PLAYER_WITH_DATA_SETUP = `[data-test-id=ix-video-with-dataSetup]`;
+const PLAYER_WITH_DATA_SETUP = `[data-test-id=ix-video-with-data-setup]`;
 
 /**
  * TODO:
@@ -193,7 +193,7 @@ context('ix-video', () => {
     });
   });
 
-  describe('with dataSetup attribute', () => {
+  describe('with data-setup attribute', () => {
     const host = PLAYER_WITH_DATA_SETUP;
     const player = `${host} video`;
     const bigPLayButton = `${host} ${BIG_PLAY_BUTTON_SELECTOR}`;
