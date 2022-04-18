@@ -237,34 +237,5 @@ context('ix-video', () => {
       cy.get(muteButton).click();
       cy.get(muteButton).should('have.attr', 'title', 'Unmute');
     });
-
-    // describe('width disablePictureInPicture', () => {
-    //   it('should not display picture in picture button', () => {
-    //     cy.get(pipButton).should('have.attr', 'title', 'Picture-in-Picture');
-    //     cy.get(pipButton).should('have.attr', 'aria-disabled', 'true');
-    //   });
-    // });
-
-    // describe('with autoplay', () => {
-    //   it('should autoplay', () => {
-    //     cy.get(host).should('have.attr', 'autoplay');
-    //     cy.get(player).should('have.attr', 'autoplay');
-    //     cy.get(bigPLayButton).should('have.css', 'display', 'none');
-    //     cy.get(playButton).should('have.attr', 'title', 'Pause');
-    //   });
-    // });
-
-    // describe('with muted', () => {
-    //   it('should be muted', () => {
-    //     cy.get(muteButton).should('have.attr', 'title', 'Unmute');
-    //   });
-    // });
-
-    // describe('with loop', () => {
-    //   it('should loop', () => {
-    //     cy.get(host).should('have.attr', 'loop');
-    //     cy.get(player).should('have.attr', 'loop');
-    //   });
-    // });
   });
 });
