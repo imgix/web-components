@@ -4,11 +4,7 @@ import {createRef, ref} from 'lit/directives/ref.js';
 import videojs, {VideoJsPlayerOptions} from 'video.js';
 import 'video.js/dist/video-js.css';
 import {convertDataSetupStringToObject} from '~/converters';
-import {
-  buildAttributeMap,
-  generateUid,
-  spreadHostAttributesToElement,
-} from '~/helpers';
+import {buildAttributeMap, spreadHostAttributesToElement} from '~/helpers';
 import {DataSetup} from '~/types';
 
 /**
@@ -78,7 +74,6 @@ export class IxVideo extends LitElement {
    * we've disabled the shadow dom.
    */
   @state()
-  uid = generateUid();
   options = {} as DataSetup;
 
   /**
@@ -111,7 +106,6 @@ export class IxVideo extends LitElement {
       <video
         ${ref(this.videoRef)}
         class="video-js vjs-default-skin ${this.className}"
-        id="ix-video-${this.uid}"
         part="video"
       ></video>
     `;
