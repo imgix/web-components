@@ -64,6 +64,17 @@ context('ix-video', () => {
     cy.get(muteButton).should('have.attr', 'title', 'Unmute');
   });
 
+  describe('with a class attribute', () => {
+    const playerContainer = `${host} .video-js`;
+    it('should add the class name to the video element', () => {
+      cy.get(host).should('have.class', 'my-custom-class');
+      cy.get(playerContainer).should('have.class', 'my-custom-class');
+    });
+    it('should preserve video-js classnames', () => {
+      cy.get(playerContainer).should('have.class', 'vjs-default-skin');
+    });
+  });
+
   describe('without width attribute', () => {
     const container = '[data-test-id=without-w-container]';
     const host = PLAYER_WITH_CONTAINER_WITHOUT_W;
