@@ -2,9 +2,10 @@
 
 imgix SDK team Web Component library.
 
-# Install
+[![npm version](https://img.shields.io/npm/v/@imgix/web-components.svg)](https://www.npmjs.com/package/@imgix/web-components)
+[![circleci](https://circleci.com/gh/imgix/web-components/tree/main.svg?style=shield&circle-token=ae497a4aade0e744c31dc29c97b967a8011ef8af)](https://circleci.com/gh/imgix/web-components/?branch=main)
 
-> Note: this package has not yet been published so these example are not yet usable
+# Install
 
 Install this package in your project:
 
