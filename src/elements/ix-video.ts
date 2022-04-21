@@ -101,6 +101,7 @@ export class IxVideo extends LitElement {
       'type',
       'width',
       'data-test-id',
+      'class',
     ];
     spreadHostAttributesToElement(attributeMap, player, excludeList);
   }
@@ -109,7 +110,7 @@ export class IxVideo extends LitElement {
     return html`
       <video
         ${ref(this.videoRef)}
-        class="video-js vjs-default-skin"
+        class="video-js vjs-default-skin ${this.className}"
         id="ix-video-${this.uid}"
         part="video"
       ></video>
