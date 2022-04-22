@@ -157,6 +157,13 @@ export class IxVideo extends LitElement {
     });
   }
 
+  override disconnectedCallback(): void {
+    // Remove the VJS markup when the element is removed from the DOM.
+    super.disconnectedCallback();
+    const player = videojs.getPlayer(`ix-video-${this.uid}`);
+    player.dispose();
+  }
+
   protected override createRenderRoot() {
     /**
      * Remove the shadow root and renders the elements as children of the host.
