@@ -31,32 +31,32 @@ export class IxVideo extends LitElement {
    * Show/hide the video controls
    * @default true
    */
-  @property({type: Boolean, attribute: 'controls'})
+  @property({type: Boolean, attribute: 'controls', reflect: true})
   controls = false;
 
   /**
    * Video player height
    */
-  @property({type: String})
+  @property({type: String, reflect: true})
   height = '';
 
   /**
    * The source of the video
    */
-  @property({type: String})
+  @property({type: String, reflect: true})
   source = '';
 
   /**
    * MIME type of the video
    * @default 'application/x-mpegURL'
    */
-  @property({type: String})
+  @property({type: String, reflect: true})
   type = 'application/x-mpegURL';
 
   /**
    * Video player width
    */
-  @property({type: String})
+  @property({type: String, reflect: true})
   width = '';
 
   /**
