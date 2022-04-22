@@ -71,14 +71,23 @@ export class IxVideo extends LitElement {
   })
   dataSetup = '{}';
 
+  @state()
   /**
    * Generate a unique ID for the video element.
    *
    * We need to do this to avoid collisions with other video elements, since
-   * we've disabled the shadow dom.
+   * we've disabled the shadow dom. This ID is also used to dispose of the
+   * video player when the element is removed from the DOM.
    */
-  @state()
   uid = generateUid();
+  /**
+   * Store videojs options object in a state property.
+   *
+   * This allows us to read the component's properties, format them in a way
+   * that video.js can read, and, if needed, merge them with the data-setup
+   * options. Storing this in state keeps the component properties from being
+   * overwritten.
+   */
   options = {} as DataSetup;
 
   /**
@@ -126,9 +135,11 @@ export class IxVideo extends LitElement {
       controls: this.controls,
       sources: [{src: this.source, type: this.type}],
     };
-    // Merge the data-setup options with the element options. This allows
-    // users to set VJS-specific options on the element. We assume users will not
-    // set the same option twice, and explain as much in the docs.
+    /**
+     * Merging the data-setup options with the element options allows users to
+     * set VJS-specific options on the element. We assume users will not set the
+     * same option twice, and explain as much in the docs.
+     */
     this.options = {...options, ...dataSetup};
     this._spreadHostAttributesToPlayer(player);
 
