@@ -53,6 +53,7 @@ context('ix-video', () => {
   });
 
   it('should toggle play/pause on click', () => {
+    cy.wait(200);
     cy.get(playButton).should('have.attr', 'title', 'Pause');
     cy.get(playButton).click();
     cy.get(playButton).should('have.attr', 'title', 'Play');
