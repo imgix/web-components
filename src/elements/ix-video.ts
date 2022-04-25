@@ -26,7 +26,23 @@ import {DataSetup} from '~/types';
  */
 @customElement('ix-video')
 export class IxVideo extends LitElement {
+  /**
+   * ------------------------------------------------------------------------
+   * Instance Variables
+   * ------------------------------------------------------------------------
+   */
+
+  /**
+   * HTMLVideoElement reference.
+   * @default Ref<HTMLVideoElement>
+   */
   videoRef = createRef<HTMLVideoElement>();
+
+  /**
+   * ------------------------------------------------------------------------
+   * Component Properties
+   * ------------------------------------------------------------------------
+   */
 
   /**
    * Show/hide the video controls
@@ -72,6 +88,11 @@ export class IxVideo extends LitElement {
   })
   dataSetup = '{}';
 
+  /**
+   * ------------------------------------------------------------------------
+   * Component State
+   * ------------------------------------------------------------------------
+   */
   @state()
   /**
    * Generate a unique ID for the video element.
@@ -90,6 +111,12 @@ export class IxVideo extends LitElement {
    * overwritten.
    */
   options = {} as DataSetup;
+
+  /**
+   * ------------------------------------------------------------------------
+   * Instance Methods
+   * ------------------------------------------------------------------------
+   */
 
   /**
    * Set all the attributes defined on the `<ix-video>` element and not on the
@@ -116,11 +143,6 @@ export class IxVideo extends LitElement {
     spreadHostAttributesToElement(attributeMap, player, excludeList);
   }
 
-  /**
-   * ------------------------------------------------------------------------
-   * Event Handlers
-   * ------------------------------------------------------------------------
-   */
   // private _handleTimeUpdate = () => {
   //   console.log(this.videoRef.value?.currentTime);
   //   this.dispatchEvent(
@@ -150,6 +172,11 @@ export class IxVideo extends LitElement {
     this.videoRef?.value?.removeEventListener(event, listener, options);
   };
 
+  /**
+   * ------------------------------------------------------------------------
+   * Render Lifecycle Methods
+   * ------------------------------------------------------------------------
+   */
   override render() {
     return html`
       <video
