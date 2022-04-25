@@ -3,6 +3,7 @@ import {customElement, property, state} from 'lit/decorators.js';
 import {createRef, ref} from 'lit/directives/ref.js';
 import videojs, {VideoJsPlayerOptions} from 'video.js';
 import 'video.js/dist/video-js.css';
+import {DefaultVideoEventsMap} from '~/constants';
 import {convertDataSetupStringToObject} from '~/converters';
 import {
   buildAttributeMap,
@@ -115,6 +116,40 @@ export class IxVideo extends LitElement {
     spreadHostAttributesToElement(attributeMap, player, excludeList);
   }
 
+  /**
+   * ------------------------------------------------------------------------
+   * Event Handlers
+   * ------------------------------------------------------------------------
+   */
+  // private _handleTimeUpdate = () => {
+  //   console.log(this.videoRef.value?.currentTime);
+  //   this.dispatchEvent(
+  //     new CustomEvent('timeupdate', {
+  //       detail: {
+  //         currentTime: this.videoRef.value?.currentTime,
+  //       },
+  //     })
+  //   );
+  // };
+
+  private _addEventListener = (
+    type: string,
+    listener: EventListenerOrEventListenerObject,
+    options?: boolean | EventListenerOptions
+  ) => {
+    const event = DefaultVideoEventsMap[type];
+    this.videoRef?.value?.addEventListener(event, listener, options);
+  };
+
+  private _removeEventListener = (
+    type: string,
+    listener: EventListenerOrEventListenerObject,
+    options?: boolean | EventListenerOptions
+  ) => {
+    const event = DefaultVideoEventsMap[type];
+    this.videoRef?.value?.removeEventListener(event, listener, options);
+  };
+
   override render() {
     return html`
       <video
@@ -164,7 +199,22 @@ export class IxVideo extends LitElement {
     }
 
     videojs(player, this.options as VideoJsPlayerOptions, () => {
-      videojs.log('ix-video: player ready');
+      console.log('ix-video: player ready');
+    });
+
+    Object.keys(DefaultVideoEventsMap).forEach((type) => {
+      this._addEventListener(type, (event: Event) => {
+        this.dispatchEvent(
+          new CustomEvent(DefaultVideoEventsMap[type], {
+            detail: {
+              event,
+              currentTime: this.videoRef.value?.currentTime,
+              playing: this.videoRef.value?.paused,
+              ended: this.videoRef.value?.ended,
+            },
+          })
+        );
+      });
     });
   }
 
@@ -173,6 +223,18 @@ export class IxVideo extends LitElement {
     super.disconnectedCallback();
     const player = videojs.getPlayer(`ix-video-${this.uid}`);
     player?.dispose();
+    // Remove DefaultVideoEventsMap event listeners
+    Object.keys(DefaultVideoEventsMap).forEach((type) => {
+      this._removeEventListener(type, (event: Event) => {
+        this.dispatchEvent(
+          new CustomEvent(DefaultVideoEventsMap[type], {
+            detail: {
+              event,
+            },
+          })
+        );
+      });
+    });
   }
 
   protected override createRenderRoot() {
