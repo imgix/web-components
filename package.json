@@ -1,6 +1,6 @@
 {
   "name": "@imgix/web-components",
-  "version": "0.0.1-rc.1",
+  "version": "0.0.1-rc.2",
   "description": "imgix Web Components library",
   "main": "dist/index.bundled.js",
   "module": "dist/index.bundled.js",

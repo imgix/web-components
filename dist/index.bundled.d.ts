@@ -51,9 +51,18 @@ declare class IxVideo extends LitElement {
      * Generate a unique ID for the video element.
      *
      * We need to do this to avoid collisions with other video elements, since
-     * we've disabled the shadow dom.
+     * we've disabled the shadow dom. This ID is also used to dispose of the
+     * video player when the element is removed from the DOM.
      */
     uid: string;
+    /**
+     * Store videojs options object in a state property.
+     *
+     * This allows us to read the component's properties, format them in a way
+     * that video.js can read, and, if needed, merge them with the data-setup
+     * options. Storing this in state keeps the component properties from being
+     * overwritten.
+     */
     options: DataSetup;
     /**
      * Set all the attributes defined on the `<ix-video>` element and not on the
@@ -67,6 +76,7 @@ declare class IxVideo extends LitElement {
     _spreadHostAttributesToPlayer(player: HTMLVideoElement): void;
     render(): import("lit-html").TemplateResult<1>;
     firstUpdated(): void;
+    disconnectedCallback(): void;
     protected createRenderRoot(): this;
 }
 declare global {
