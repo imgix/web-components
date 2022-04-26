@@ -32,4 +32,4 @@ export const DefaultVideoEventsMap = {
   TIMEUPDATE: 'timeupdate',
   VOLUMECHANGE: 'volumechange',
   WAITING: 'waiting',
-} as {[key: string]: string};
+};
