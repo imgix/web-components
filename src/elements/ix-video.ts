@@ -144,17 +144,6 @@ export class IxVideo extends LitElement {
     spreadHostAttributesToElement(attributeMap, player, excludeList);
   }
 
-  // private _handleTimeUpdate = () => {
-  //   console.log(this.videoRef.value?.currentTime);
-  //   this.dispatchEvent(
-  //     new CustomEvent('timeupdate', {
-  //       detail: {
-  //         currentTime: this.videoRef.value?.currentTime,
-  //       },
-  //     })
-  //   );
-  // };
-
   private _addEventListener = (
     type: keyof typeof DefaultVideoEventsMap,
     listener: EventListenerOrEventListenerObject,
