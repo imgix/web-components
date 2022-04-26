@@ -7,6 +7,7 @@ import {DefaultVideoEventsMap} from '~/constants';
 import {convertDataSetupStringToObject} from '~/converters';
 import {
   buildAttributeMap,
+  createEventDetails,
   generateUid,
   spreadHostAttributesToElement,
 } from '~/helpers';
@@ -155,7 +156,7 @@ export class IxVideo extends LitElement {
   // };
 
   private _addEventListener = (
-    type: string,
+    type: keyof typeof DefaultVideoEventsMap,
     listener: EventListenerOrEventListenerObject,
     options?: boolean | EventListenerOptions
   ) => {
@@ -164,7 +165,7 @@ export class IxVideo extends LitElement {
   };
 
   private _removeEventListener = (
-    type: string,
+    type: keyof typeof DefaultVideoEventsMap,
     listener: EventListenerOrEventListenerObject,
     options?: boolean | EventListenerOptions
   ) => {
@@ -227,18 +228,18 @@ export class IxVideo extends LitElement {
 
     videojs(player, this.options as VideoJsPlayerOptions, () => {
       console.log('ix-video: player ready');
+      // Prevent VJS error logging in console
+      videojs.log.level('off');
     });
 
-    Object.keys(DefaultVideoEventsMap).forEach((type) => {
+    // add built-in <video> event listeners to ix-video so we can dispatch
+    // custom events to the custom element
+    Object.keys(DefaultVideoEventsMap).forEach((_type) => {
+      const type = _type as keyof typeof DefaultVideoEventsMap;
       this._addEventListener(type, (event: Event) => {
         this.dispatchEvent(
           new CustomEvent(DefaultVideoEventsMap[type], {
-            detail: {
-              event,
-              currentTime: this.videoRef.value?.currentTime,
-              playing: this.videoRef.value?.paused,
-              ended: this.videoRef.value?.ended,
-            },
+            detail: createEventDetails(type, event, this.videoRef?.value),
           })
         );
       });
@@ -250,14 +251,14 @@ export class IxVideo extends LitElement {
     super.disconnectedCallback();
     const player = videojs.getPlayer(`ix-video-${this.uid}`);
     player?.dispose();
+
     // Remove DefaultVideoEventsMap event listeners
-    Object.keys(DefaultVideoEventsMap).forEach((type) => {
+    Object.keys(DefaultVideoEventsMap).forEach((_type) => {
+      const type = _type as keyof typeof DefaultVideoEventsMap;
       this._removeEventListener(type, (event: Event) => {
         this.dispatchEvent(
           new CustomEvent(DefaultVideoEventsMap[type], {
-            detail: {
-              event,
-            },
+            detail: createEventDetails(type, event, this.videoRef?.value),
           })
         );
       });
