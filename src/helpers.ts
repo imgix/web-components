@@ -1,4 +1,5 @@
 import type {LitElement} from 'lit';
+import {DefaultVideoEventsMap} from './constants';
 
 export const generateUid = function () {
   let ID = '';
@@ -41,4 +42,91 @@ export const spreadHostAttributesToElement = function (
       targetElement?.setAttribute(key, value);
     }
   });
+};
+
+/**
+ * Depending on the type of event, create an object that stores the event and
+ * the video node's relevant attributes for that event.
+ *
+ * This is used to create custom event details that can be dispatched to the
+ * component's event listeners.
+ *
+ * @param eventName - The name of the event to listen for.
+ * @param event - The Event object that was dispatched.
+ * @param video - The video element that the event was dispatched on.
+ * @returns An object containing the `event` object and information about the
+ * video.
+ */
+export const createEventDetails = (
+  eventName: keyof typeof DefaultVideoEventsMap,
+  event: Event,
+  video?: HTMLVideoElement
+) => {
+  switch (eventName.toLowerCase()) {
+    case 'abort':
+    case 'emptied':
+    case 'loadstart':
+    case 'seeking':
+    case 'stalled':
+    case 'suspend': {
+      return {event};
+    }
+    case 'canplay':
+    case 'canplaythrough':
+    case 'durationchange':
+    case 'loadeddata':
+    case 'progress':
+    case 'timeupdate':
+    case 'waiting': {
+      return {
+        buffered: video?.buffered,
+        currentTime: video?.currentTime,
+        duration: video?.duration,
+        event,
+      };
+    }
+    case 'ended':
+    case 'pause':
+    case 'play':
+    case 'playing':
+    case 'seeked': {
+      return {
+        currentTime: video?.currentTime,
+        duration: video?.duration,
+        event,
+      };
+    }
+    case 'error': {
+      return {event, error: video?.error};
+    }
+    case 'loadedmetadata': {
+      return {
+        buffered: video?.buffered,
+        currentTime: video?.currentTime,
+        duration: video?.duration,
+        width: video?.videoWidth,
+        height: video?.videoHeight,
+        event,
+      };
+    }
+    case 'ratechange': {
+      return {
+        currentTime: video?.currentTime,
+        duration: video?.duration,
+        playbackRate: video?.playbackRate,
+        event,
+      };
+    }
+    case 'volumechange': {
+      return {
+        currentTime: video?.currentTime,
+        duration: video?.duration,
+        volume: video?.volume,
+        muted: video?.muted,
+        event,
+      };
+    }
+    default:
+      return {event};
+  }
 };
