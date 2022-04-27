@@ -55,27 +55,26 @@ export class IxVideo extends LitElement {
   /**
    * Video player height
    */
-  @property({type: String, reflect: true})
-  height = '';
+  @property({reflect: true, attribute: 'height'})
+  height: string | undefined = undefined;
 
   /**
    * The source of the video
    */
-  @property({type: String, reflect: true})
-  source = '';
+  @property({reflect: true})
+  source: string | undefined = undefined;
 
   /**
    * MIME type of the video
-   * @default 'application/x-mpegURL'
    */
-  @property({type: String, reflect: true})
+  @property({reflect: true})
   type = 'application/x-mpegURL';
 
   /**
    * Video player width
    */
-  @property({type: String, reflect: true})
-  width = '';
+  @property({reflect: true})
+  width: string | undefined = undefined;
 
   /**
    * Video.js data-setup options json string. Users should not set them same
@@ -87,7 +86,7 @@ export class IxVideo extends LitElement {
     type: String,
     attribute: 'data-setup',
   })
-  dataSetup = '{}';
+  dataSetup: string | undefined = undefined;
 
   /**
    * ------------------------------------------------------------------------
@@ -182,10 +181,10 @@ export class IxVideo extends LitElement {
     const player = this.videoRef?.value as HTMLVideoElement;
     const dataSetup = convertDataSetupStringToObject(this.dataSetup);
     const options = {
-      width: this.width,
-      height: this.height,
+      width: this.width ?? '',
+      height: this.height ?? '',
       controls: this.controls,
-      sources: [{src: this.source, type: this.type}],
+      sources: this.source ? [{src: this.source, type: this.type}] : [],
     };
     /**
      * Merging the data-setup options with the element options allows users to
