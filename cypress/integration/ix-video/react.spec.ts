@@ -1,4 +1,4 @@
-import {BIG_PLAY_BUTTON_SELECTOR, REACT_PLAYER} from '../fixtures/selectors';
+import {BIG_PLAY_BUTTON_SELECTOR, REACT_PLAYER} from '../../fixtures/selectors';
 
 context('in a React application', () => {
   beforeEach(() => {
