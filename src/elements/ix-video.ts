@@ -88,6 +88,9 @@ export class IxVideo extends LitElement {
   })
   dataSetup: string | undefined = undefined;
 
+  @property({type: Boolean})
+  fixed = false;
+
   /**
    * ------------------------------------------------------------------------
    * Component State
@@ -111,6 +114,7 @@ export class IxVideo extends LitElement {
    * overwritten.
    */
   options = {} as DataSetup;
+  vjsPlayer: videojs.Player | undefined = undefined;
 
   /**
    * ------------------------------------------------------------------------
@@ -178,13 +182,13 @@ export class IxVideo extends LitElement {
   }
 
   override firstUpdated(): void {
-    const player = this.videoRef?.value as HTMLVideoElement;
     const dataSetup = convertDataSetupStringToObject(this.dataSetup);
     const options = {
       width: this.width ?? '',
       height: this.height ?? '',
       controls: this.controls,
       sources: this.source ? [{src: this.source, type: this.type}] : [],
+      fluid: !this.fixed,
     };
     /**
      * Merging the data-setup options with the element options allows users to
@@ -192,7 +196,22 @@ export class IxVideo extends LitElement {
      * same option twice, and explain as much in the docs.
      */
     this.options = {...options, ...dataSetup};
+    const player = this.videoRef?.value as HTMLVideoElement;
+
     this._spreadHostAttributesToPlayer(player);
+
+    // add built-in <video> event listeners to ix-video so we can dispatch
+    // custom events to the custom element
+    Object.keys(DefaultVideoEventsMap).forEach((_type) => {
+      const type = _type as keyof typeof DefaultVideoEventsMap;
+      this._addEventListener(type, (event: Event) => {
+        this.dispatchEvent(
+          new CustomEvent(DefaultVideoEventsMap[type], {
+            detail: createEventDetails(type, event, this.videoRef?.value),
+          })
+        );
+      });
+    });
 
     if (!this.options.width) {
       /**
@@ -207,31 +226,38 @@ export class IxVideo extends LitElement {
        * 100% width value by setting the value to the element's offsetWidth.
        *
        * If the offsetWidth is 0, in other words there is no measurable
-       * containing element height, we don't set a width value at all. This
+       * containing element height, we set the width value to 'auto'. This
        * allows VideoJS to fallback to rendering the video at its original size.
        */
       this.style.width = '100%'; // update the host element width
-      this.options.width = this.offsetWidth || ''; // update the video element width
+      this.options.width = this.offsetWidth || 'auto'; // update the video element width
+    } else {
+      /**
+       * When the `width` and `height` properties are set, we want change the
+       * host elements dimensions to match.
+       */
+      this.style.width = this.options.width + 'px';
+      if (this.options.height) {
+        this.style.height = this.options.height + 'px';
+      }
     }
 
-    videojs(player, this.options as VideoJsPlayerOptions, () => {
-      console.log('ix-video: player ready');
-      // Prevent VJS error logging in console
-      videojs.log.level('off');
-    });
+    // Need to set a display value otherwise w/h styles are not applied
+    this.style.display = 'block';
 
-    // add built-in <video> event listeners to ix-video so we can dispatch
-    // custom events to the custom element
-    Object.keys(DefaultVideoEventsMap).forEach((_type) => {
-      const type = _type as keyof typeof DefaultVideoEventsMap;
-      this._addEventListener(type, (event: Event) => {
-        this.dispatchEvent(
-          new CustomEvent(DefaultVideoEventsMap[type], {
-            detail: createEventDetails(type, event, this.videoRef?.value),
-          })
-        );
-      });
-    });
+    // Initialize the videojs player, which will modify the DOM to add the
+    // video player and its controls.
+    const vjsPLayer = videojs(
+      player,
+      this.options as VideoJsPlayerOptions,
+      () => {
+        console.log('ix-video: player ready');
+        // Prevent VJS error logging in console
+        videojs.log.level('off');
+      }
+    );
+    // store a reference to the videojs player in state
+    this.vjsPlayer = vjsPLayer;
   }
 
   override disconnectedCallback(): void {
