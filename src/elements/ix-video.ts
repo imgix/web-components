@@ -250,14 +250,37 @@ export class IxVideo extends LitElement {
       ...this.dataSetup,
     };
   };
-       * If the offsetWidth is 0, in other words there is no measurable
-       * containing element height, we set the width value to 'auto'. This
-       * allows VideoJS to fallback to rendering the video at its original size.
-       */
-      this.style.width = '100%'; // update the host element width
-      this.options.width = this.offsetWidth || 'auto'; // update the video element width
-    } else {
-      /**
+
+  /**
+   * Create a CSSStyleDeclaration object from the state styles and the width and
+   * height properties. Ensure the width and height are either set to `px` or `%`
+   * values.
+   *
+   * @param {DataSetup} options - data-setup options
+   * @returns {CSSStyleDeclaration} CSSStyleDeclaration style object
+   */
+  private _getStyles = (options: DataSetup) => {
+    return {
+      ...this.styles,
+      width: options.width ? options.width + 'px' : '100%',
+      height: options.height ? options.height + 'px' : '100%',
+    };
+  };
+
+  /**
+   * Update the host style properties to match the style object.
+   * @param {CSSStyleDeclaration} styles - CSSStyleDeclaration style object
+   * @returns {void} void;
+   */
+  private _setStyles = (styles: CSSStyleDeclaration) => {
+    for (const key in styles) {
+      if (styles.hasOwnProperty(key)) {
+        const value = styles[key];
+        this.style.setProperty(key, value);
+      }
+    }
+  };
+
        * When the `width` and `height` properties are set, we want change the
        * host elements dimensions to match.
        */
