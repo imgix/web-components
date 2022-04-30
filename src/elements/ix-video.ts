@@ -122,7 +122,13 @@ export class IxVideo extends LitElement {
     fluid: !this.fixed,
   } as DataSetup;
   vjsPlayer: videojs.Player | undefined = undefined;
-
+  styles: CSSStyleDeclaration = {
+    // set the host width and height
+    width: this.options.width ? this.options.width + 'px' : '100%',
+    height: this.options.height ? this.options.height + 'px' : '100%',
+    // Need to set a display value otherwise w/h styles are not applied
+    display: 'block',
+  } as CSSStyleDeclaration;
   /**
    * ------------------------------------------------------------------------
    * Instance Methods
