@@ -114,7 +114,13 @@ export class IxVideo extends LitElement {
    * options. Storing this in state keeps the component properties from being
    * overwritten.
    */
-  options = {} as DataSetup;
+  options = {
+    width: this.width ?? 'auto',
+    height: this.height ?? 'auto',
+    controls: this.controls,
+    sources: this.source ? [{src: this.source, type: this.type}] : [],
+    fluid: !this.fixed,
+  } as DataSetup;
   vjsPlayer: videojs.Player | undefined = undefined;
 
   /**
