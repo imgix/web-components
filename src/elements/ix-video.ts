@@ -285,8 +285,15 @@ export class IxVideo extends LitElement {
       }
     }
 
-    // Need to set a display value otherwise w/h styles are not applied
-    this.style.display = 'block';
+  override firstUpdated(): void {
+    const player = this.videoRef?.value as HTMLVideoElement;
+    this.options = this._getOptions();
+
+    this._spreadHostAttributesToPlayer(player);
+    this._bubbleUpEventListeners();
+
+    const styles = this._getStyles(this.options);
+    this._setStyles(styles);
 
     // Initialize the videojs player, which will modify the DOM to add the
     // video player and its controls.
@@ -304,22 +311,14 @@ export class IxVideo extends LitElement {
   }
 
   override disconnectedCallback(): void {
-    // Remove the VJS markup when the element is removed from the DOM.
     super.disconnectedCallback();
+
+    // Remove the VJS markup when the element is removed from the DOM.
     const player = videojs.getPlayer(`ix-video-${this.uid}`);
     player?.dispose();
 
     // Remove DefaultVideoEventsMap event listeners
-    Object.keys(DefaultVideoEventsMap).forEach((_type) => {
-      const type = _type as keyof typeof DefaultVideoEventsMap;
-      this._removeEventListener(type, (event: Event) => {
-        this.dispatchEvent(
-          new CustomEvent(DefaultVideoEventsMap[type], {
-            detail: createEventDetails(type, event, this.videoRef?.value),
-          })
-        );
-      });
-    });
+    this._removeEventListeners();
   }
 
   protected override createRenderRoot() {
