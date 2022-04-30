@@ -220,18 +220,30 @@ export class IxVideo extends LitElement {
       });
     });
 
-    if (!this.options.width) {
-      /**
-       * When the `width` and `height` properties are not set, we want to mimic
-       * video.js' ability to take up 100% of the containing elements w/h.
-       *
-       * Because our player is contained inside a custom element, we need to
-       * manually set the width of the host _and_ the video element to be 100%
-       * of the containing element.
-       *
-       * Because videojs doesn't understand percentages, instead we approximate
-       * 100% width value by setting the value to the element's offsetWidth.
-       *
+  /**
+   * Get the updated video player's options and merge them with the data-setup
+   * options.
+   *
+   * Merging the data-setup options with the element options allows users to
+   * set VJS-specific options on the element. We assume users will not set the
+   * same option twice, and explain as much in the docs.
+   *
+   * @see https://docs.videojs.com/tutorial-options.html
+   * @returns {void} void;
+   * @private
+   * @memberof IxVideo
+   */
+  private _getOptions = () => {
+    return {
+      ...this.options,
+      width: this.width ?? '',
+      height: this.height ?? '',
+      controls: this.controls,
+      sources: this.source ? [{src: this.source, type: this.type}] : [],
+      fluid: !this.fixed,
+      ...this.dataSetup,
+    };
+  };
        * If the offsetWidth is 0, in other words there is no measurable
        * containing element height, we set the width value to 'auto'. This
        * allows VideoJS to fallback to rendering the video at its original size.
