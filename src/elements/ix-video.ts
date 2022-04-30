@@ -179,42 +179,14 @@ export class IxVideo extends LitElement {
   };
 
   /**
-   * ------------------------------------------------------------------------
-   * Render Lifecycle Methods
-   * ------------------------------------------------------------------------
+   * Add an event listener for every `<video>` event to `<ix-video>` and
+   * dispatch a custom event with the same name. This allows us to emulate the
+   * native `<video>` events on the custom element.
+   * @returns {void} void;
+   * @private
+   * @memberof IxVideo
    */
-  override render() {
-    return html`
-      <video
-        ${ref(this.videoRef)}
-        class="video-js vjs-default-skin ${this.className}"
-        id="ix-video-${this.uid}"
-        part="video"
-      ></video>
-    `;
-  }
-
-  override firstUpdated(): void {
-    const dataSetup = convertDataSetupStringToObject(this.dataSetup);
-    const options = {
-      width: this.width ?? '',
-      height: this.height ?? '',
-      controls: this.controls,
-      sources: this.source ? [{src: this.source, type: this.type}] : [],
-      fluid: !this.fixed,
-    };
-    /**
-     * Merging the data-setup options with the element options allows users to
-     * set VJS-specific options on the element. We assume users will not set the
-     * same option twice, and explain as much in the docs.
-     */
-    this.options = {...options, ...dataSetup};
-    const player = this.videoRef?.value as HTMLVideoElement;
-
-    this._spreadHostAttributesToPlayer(player);
-
-    // add built-in <video> event listeners to ix-video so we can dispatch
-    // custom events to the custom element
+  private _bubbleUpEventListeners = () => {
     Object.keys(DefaultVideoEventsMap).forEach((_type) => {
       const type = _type as keyof typeof DefaultVideoEventsMap;
       this._addEventListener(type, (event: Event) => {
@@ -225,6 +197,29 @@ export class IxVideo extends LitElement {
         );
       });
     });
+  };
+
+  /**
+   * Remove every `<video>` event listener from to `<ix-video>` and dispatch a
+   * custom event with the same name. This should be invoked during cleanup,
+   * when the video player is removed from the DOM.
+   * @returns {void} void;
+   * @private
+   * @memberof IxVideo
+   */
+  private _removeEventListeners = () => {
+    // Remove DefaultVideoEventsMap event listeners
+    Object.keys(DefaultVideoEventsMap).forEach((_type) => {
+      const type = _type as keyof typeof DefaultVideoEventsMap;
+      this._removeEventListener(type, (event: Event) => {
+        this.dispatchEvent(
+          new CustomEvent(DefaultVideoEventsMap[type], {
+            detail: createEventDetails(type, event, this.videoRef?.value),
+          })
+        );
+      });
+    });
+  };
 
   /**
    * Get the updated video player's options and merge them with the data-setup
