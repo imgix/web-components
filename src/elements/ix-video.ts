@@ -276,14 +276,50 @@ export class IxVideo extends LitElement {
     }
   };
 
-       * When the `width` and `height` properties are set, we want change the
-       * host elements dimensions to match.
-       */
-      this.style.width = this.options.width + 'px';
-      if (this.options.height) {
-        this.style.height = this.options.height + 'px';
+  /**
+   * ------------------------------------------------------------------------
+   * Render Lifecycle Methods
+   * ------------------------------------------------------------------------
+   */
+  override render() {
+    return html`
+      <video
+        ${ref(this.videoRef)}
+        class="video-js vjs-default-skin vjs-big-play-centered ${this
+          .className}"
+        id="ix-video-${this.uid}"
+        part="video"
+      ></video>
+    `;
+  }
+
+  override updated(changed: PropertyValues<this>) {
+    super.updated(changed);
+
+    this.options = this._getOptions();
+    const {controls, height, width, fixed} = this.options;
+
+    // For each changed property, update the the vjsPlayer attribute value
+    changed.forEach((_, propName) => {
+      if (propName === 'source') {
+        this.vjsPlayer?.src(
+          this.source ? [{src: this.source, type: this.type}] : []
+        );
       }
-    }
+      if (propName === 'controls') {
+        this.vjsPlayer?.controls(!!controls);
+      }
+      if (propName === 'height' && height) {
+        this.vjsPlayer?.height(Number(height));
+      }
+      if (propName === 'width' && width) {
+        this.vjsPlayer?.height(Number(width));
+      }
+      if (propName === 'fixed') {
+        this.vjsPlayer?.fluid(!fixed);
+      }
+    });
+  }
 
   override firstUpdated(): void {
     const player = this.videoRef?.value as HTMLVideoElement;
