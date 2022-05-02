@@ -297,7 +297,7 @@ export class IxVideo extends LitElement {
     super.updated(changed);
 
     this.options = this._getOptions();
-    const {controls, height, width, fixed} = this.options;
+    const {controls, height, width, fluid} = this.options;
 
     // update component styles
     const newStyles = this._getStyles(this.options);
@@ -317,10 +317,10 @@ export class IxVideo extends LitElement {
         this.vjsPlayer?.height(Number(height));
       }
       if (propName === 'width' && width) {
-        this.vjsPlayer?.height(Number(width));
+        this.vjsPlayer?.width(Number(width));
       }
       if (propName === 'fixed') {
-        this.vjsPlayer?.fluid(!fixed);
+        this.vjsPlayer?.fluid(!!fluid);
       }
     });
   }
