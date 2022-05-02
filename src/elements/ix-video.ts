@@ -299,6 +299,10 @@ export class IxVideo extends LitElement {
     this.options = this._getOptions();
     const {controls, height, width, fixed} = this.options;
 
+    // update component styles
+    const newStyles = this._getStyles(this.options);
+    this._setStyles(newStyles);
+
     // For each changed property, update the the vjsPlayer attribute value
     changed.forEach((_, propName) => {
       if (propName === 'source') {
