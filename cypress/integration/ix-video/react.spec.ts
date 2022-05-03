@@ -21,10 +21,6 @@ context('in a React application', () => {
     cy.get(bigPLayButton).should('exist');
   });
 
-  it('should display large play button on first render', () => {
-    cy.get(bigPLayButton).should('exist');
-  });
-
   describe('with a class attribute', () => {
     const playerContainer = `${ixVideoTag} .video-js`;
     it('should add the class name to the video element', () => {
