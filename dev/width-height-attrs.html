@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- HLS video with no w attribute fills container w -->
+    <div
+      data-test-id="without-w-container"
+      style="display: flex; width: 300px; height: 255px"
+    >
+      <ix-video
+        data-test-id="ix-video-without-w"
+        source="https://assets.imgix.video/videos/girl-reading-book-in-library.mp4"
+        controls
+      ></ix-video>
+    </div>
+    <!-- Players without a container -->
+    <!-- HLS video with w/h attributes -->
+    <ix-video
+      data-test-id="ix-video-with-w-and-h"
+      source="https://assets.imgix.video/videos/girl-reading-book-in-library.mp4"
+      controls
+      width="200"
+      height="200"
+    ></ix-video>
+    <!-- HLS video without w/h attributes -->
+    <ix-video
+      data-test-id="ix-video-without-w-or-h"
+      source="https://assets.imgix.video/videos/girl-reading-book-in-library.mp4"
+      controls
+    ></ix-video>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>
