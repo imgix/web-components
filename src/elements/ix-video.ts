@@ -166,8 +166,7 @@ export class IxVideo extends LitElement {
     listener: EventListenerOrEventListenerObject,
     options?: boolean | EventListenerOptions
   ) => {
-    const event = DefaultVideoEventsMap[type];
-    this.videoRef?.value?.addEventListener(event, listener, options);
+    this.videoRef?.value?.addEventListener(type, listener, options);
   };
 
   private _removeEventListener = (
@@ -175,8 +174,7 @@ export class IxVideo extends LitElement {
     listener: EventListenerOrEventListenerObject,
     options?: boolean | EventListenerOptions
   ) => {
-    const event = DefaultVideoEventsMap[type];
-    this.videoRef?.value?.removeEventListener(event, listener, options);
+    this.videoRef?.value?.removeEventListener(type, listener, options);
   };
 
   /**
