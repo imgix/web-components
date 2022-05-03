@@ -7,13 +7,16 @@
     <title>Document</title>
   </head>
   <body>
-    <!-- HLS video that fills container -->
+    <!-- HLS video with extra attribute -->
     <div style="display: flex; width: 480px; height: 255px">
       <ix-video
-        class="my-custom-class"
-        data-test-id="ix-video-with-container"
+        data-test-id="ix-video-with-video-attributes"
         source="https://assets.imgix.video/videos/girl-reading-book-in-library.mp4"
         controls
+        autoplay
+        disablePictureInPicture
+        loop
+        muted
       ></ix-video>
     </div>
     <script type="module" src="./main.ts"></script>

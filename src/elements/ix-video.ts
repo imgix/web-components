@@ -1,4 +1,4 @@
-import {html, LitElement} from 'lit';
+import {html, LitElement, PropertyValues} from 'lit';
 import {customElement, property, state} from 'lit/decorators.js';
 import {createRef, ref} from 'lit/directives/ref.js';
 import videojs, {VideoJsPlayerOptions} from 'video.js';
@@ -55,27 +55,26 @@ export class IxVideo extends LitElement {
   /**
    * Video player height
    */
-  @property({type: String, reflect: true})
-  height = '';
+  @property({reflect: true, attribute: 'height'})
+  height: string | undefined = undefined;
 
   /**
    * The source of the video
    */
-  @property({type: String, reflect: true})
-  source = '';
+  @property({reflect: true})
+  source: string | undefined = undefined;
 
   /**
    * MIME type of the video
-   * @default 'application/x-mpegURL'
    */
-  @property({type: String, reflect: true})
+  @property({reflect: true})
   type = 'application/x-mpegURL';
 
   /**
    * Video player width
    */
-  @property({type: String, reflect: true})
-  width = '';
+  @property({reflect: true})
+  width: string | undefined = undefined;
 
   /**
    * Video.js data-setup options json string. Users should not set them same
@@ -84,10 +83,15 @@ export class IxVideo extends LitElement {
    * @see https://docs.videojs.com/tutorial-options.html
    */
   @property({
-    type: String,
+    type: Object,
     attribute: 'data-setup',
+    converter: (value: string | null) =>
+      convertDataSetupStringToObject(value ?? ''),
   })
-  dataSetup = '{}';
+  dataSetup = {};
+
+  @property({type: Boolean})
+  fixed = false;
 
   /**
    * ------------------------------------------------------------------------
@@ -111,8 +115,21 @@ export class IxVideo extends LitElement {
    * options. Storing this in state keeps the component properties from being
    * overwritten.
    */
-  options = {} as DataSetup;
-
+  options = {
+    width: this.width ?? 'auto',
+    height: this.height ?? 'auto',
+    controls: this.controls,
+    sources: this.source ? [{src: this.source, type: this.type}] : [],
+    fluid: !this.fixed,
+  } as DataSetup;
+  vjsPlayer: videojs.Player | undefined = undefined;
+  styles: CSSStyleDeclaration = {
+    // set the host width and height
+    width: this.options.width ? this.options.width + 'px' : '100%',
+    height: this.options.height ? this.options.height + 'px' : '100%',
+    // Need to set a display value otherwise w/h styles are not applied
+    display: 'block',
+  } as CSSStyleDeclaration;
   /**
    * ------------------------------------------------------------------------
    * Instance Methods
@@ -163,66 +180,14 @@ export class IxVideo extends LitElement {
   };
 
   /**
-   * ------------------------------------------------------------------------
-   * Render Lifecycle Methods
-   * ------------------------------------------------------------------------
+   * Add an event listener for every `<video>` event to `<ix-video>` and
+   * dispatch a custom event with the same name. This allows us to emulate the
+   * native `<video>` events on the custom element.
+   * @returns {void} void;
+   * @private
+   * @memberof IxVideo
    */
-  override render() {
-    return html`
-      <video
-        ${ref(this.videoRef)}
-        class="video-js vjs-default-skin ${this.className}"
-        id="ix-video-${this.uid}"
-        part="video"
-      ></video>
-    `;
-  }
-
-  override firstUpdated(): void {
-    const player = this.videoRef?.value as HTMLVideoElement;
-    const dataSetup = convertDataSetupStringToObject(this.dataSetup);
-    const options = {
-      width: this.width,
-      height: this.height,
-      controls: this.controls,
-      sources: [{src: this.source, type: this.type}],
-    };
-    /**
-     * Merging the data-setup options with the element options allows users to
-     * set VJS-specific options on the element. We assume users will not set the
-     * same option twice, and explain as much in the docs.
-     */
-    this.options = {...options, ...dataSetup};
-    this._spreadHostAttributesToPlayer(player);
-
-    if (!this.options.width) {
-      /**
-       * When the `width` and `height` properties are not set, we want to mimic
-       * video.js' ability to take up 100% of the containing elements w/h.
-       *
-       * Because our player is contained inside a custom element, we need to
-       * manually set the width of the host _and_ the video element to be 100%
-       * of the containing element.
-       *
-       * Because videojs doesn't understand percentages, instead we approximate
-       * 100% width value by setting the value to the element's offsetWidth.
-       *
-       * If the offsetWidth is 0, in other words there is no measurable
-       * containing element height, we don't set a width value at all. This
-       * allows VideoJS to fallback to rendering the video at its original size.
-       */
-      this.style.width = '100%'; // update the host element width
-      this.options.width = this.offsetWidth || ''; // update the video element width
-    }
-
-    videojs(player, this.options as VideoJsPlayerOptions, () => {
-      console.log('ix-video: player ready');
-      // Prevent VJS error logging in console
-      videojs.log.level('off');
-    });
-
-    // add built-in <video> event listeners to ix-video so we can dispatch
-    // custom events to the custom element
+  private _bubbleUpEventListeners = () => {
     Object.keys(DefaultVideoEventsMap).forEach((_type) => {
       const type = _type as keyof typeof DefaultVideoEventsMap;
       this._addEventListener(type, (event: Event) => {
@@ -233,14 +198,17 @@ export class IxVideo extends LitElement {
         );
       });
     });
-  }
+  };
 
-  override disconnectedCallback(): void {
-    // Remove the VJS markup when the element is removed from the DOM.
-    super.disconnectedCallback();
-    const player = videojs.getPlayer(`ix-video-${this.uid}`);
-    player?.dispose();
-
+  /**
+   * Remove every `<video>` event listener from to `<ix-video>` and dispatch a
+   * custom event with the same name. This should be invoked during cleanup,
+   * when the video player is removed from the DOM.
+   * @returns {void} void;
+   * @private
+   * @memberof IxVideo
+   */
+  private _removeEventListeners = () => {
     // Remove DefaultVideoEventsMap event listeners
     Object.keys(DefaultVideoEventsMap).forEach((_type) => {
       const type = _type as keyof typeof DefaultVideoEventsMap;
@@ -252,6 +220,146 @@ export class IxVideo extends LitElement {
         );
       });
     });
+  };
+
+  /**
+   * Get the updated video player's options and merge them with the data-setup
+   * options.
+   *
+   * Merging the data-setup options with the element options allows users to
+   * set VJS-specific options on the element. We assume users will not set the
+   * same option twice, and explain as much in the docs.
+   *
+   * @see https://docs.videojs.com/tutorial-options.html
+   * @returns {void} void;
+   * @private
+   * @memberof IxVideo
+   */
+  private _getOptions = () => {
+    return {
+      ...this.options,
+      width: this.width ?? '',
+      height: this.height ?? '',
+      controls: this.controls,
+      sources: this.source ? [{src: this.source, type: this.type}] : [],
+      fluid: !this.fixed,
+      ...this.dataSetup,
+    };
+  };
+
+  /**
+   * Create a CSSStyleDeclaration object from the state styles and the width and
+   * height properties. Ensure the width and height are either set to `px` or `%`
+   * values.
+   *
+   * @param {DataSetup} options - data-setup options
+   * @returns {CSSStyleDeclaration} CSSStyleDeclaration style object
+   */
+  private _getStyles = (options: DataSetup) => {
+    return {
+      ...this.styles,
+      width: options.width ? options.width + 'px' : '100%',
+      height: options.height ? options.height + 'px' : '100%',
+    };
+  };
+
+  /**
+   * Update the host style properties to match the style object.
+   * @param {CSSStyleDeclaration} styles - CSSStyleDeclaration style object
+   * @returns {void} void;
+   */
+  private _setStyles = (styles: CSSStyleDeclaration) => {
+    for (const key in styles) {
+      if (styles.hasOwnProperty(key)) {
+        const value = styles[key];
+        this.style.setProperty(key, value);
+      }
+    }
+  };
+
+  /**
+   * ------------------------------------------------------------------------
+   * Render Lifecycle Methods
+   * ------------------------------------------------------------------------
+   */
+  override render() {
+    return html`
+      <video
+        ${ref(this.videoRef)}
+        class="video-js vjs-default-skin vjs-big-play-centered ${this
+          .className}"
+        id="ix-video-${this.uid}"
+        part="video"
+      ></video>
+    `;
+  }
+
+  override updated(changed: PropertyValues<this>) {
+    super.updated(changed);
+
+    this.options = this._getOptions();
+    const {controls, height, width, fluid} = this.options;
+
+    // update component styles
+    const newStyles = this._getStyles(this.options);
+    this._setStyles(newStyles);
+
+    // For each changed property, update the the vjsPlayer attribute value
+    changed.forEach((_, propName) => {
+      if (propName === 'source') {
+        this.vjsPlayer?.src(
+          this.source ? [{src: this.source, type: this.type}] : []
+        );
+      }
+      if (propName === 'controls') {
+        this.vjsPlayer?.controls(!!controls);
+      }
+      if (propName === 'height' && height) {
+        this.vjsPlayer?.height(Number(height));
+      }
+      if (propName === 'width' && width) {
+        this.vjsPlayer?.width(Number(width));
+      }
+      if (propName === 'fixed') {
+        this.vjsPlayer?.fluid(!!fluid);
+      }
+    });
+  }
+
+  override firstUpdated(): void {
+    const player = this.videoRef?.value as HTMLVideoElement;
+    this.options = this._getOptions();
+
+    this._spreadHostAttributesToPlayer(player);
+    this._bubbleUpEventListeners();
+
+    const styles = this._getStyles(this.options);
+    this._setStyles(styles);
+
+    // Initialize the videojs player, which will modify the DOM to add the
+    // video player and its controls.
+    const vjsPLayer = videojs(
+      player,
+      this.options as VideoJsPlayerOptions,
+      () => {
+        console.log('ix-video: player ready');
+        // Prevent VJS error logging in console
+        videojs.log.level('off');
+      }
+    );
+    // store a reference to the videojs player in state
+    this.vjsPlayer = vjsPLayer;
+  }
+
+  override disconnectedCallback(): void {
+    super.disconnectedCallback();
+
+    // Remove the VJS markup when the element is removed from the DOM.
+    const player = videojs.getPlayer(`ix-video-${this.uid}`);
+    player?.dispose();
+
+    // Remove DefaultVideoEventsMap event listeners
+    this._removeEventListeners();
   }
 
   protected override createRenderRoot() {
