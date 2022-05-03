@@ -1,6 +1,6 @@
 import {PLAYER_WITH_CONTAINER} from '../../fixtures/selectors';
 
-context('ix-video: styles', () => {
+context('ix-video: props', () => {
   before(() => {
     cy.visit('/props.html');
   });
@@ -27,7 +27,6 @@ context('ix-video: styles', () => {
       cy.get(host).then(($el) => {
         $el.removeAttr('fixed');
         cy.wait(1000).then(() => {
-          console.log($el.find('[part="video"]').attr('class'));
           const fluid = $el.find('[part="video"]').hasClass('vjs-fluid');
           expect(fluid).to.equal(true);
           $el.attr('fixed', '');
@@ -41,7 +40,6 @@ context('ix-video: styles', () => {
       cy.get(host).then(($el) => {
         $el.removeAttr('controls');
         cy.wait(1000).then(() => {
-          console.log($el.find('[part="video"]').attr('class'));
           const hasControls = $el
             .find('[part="video"]')
             .hasClass('vjs-controls-enabled');
