@@ -14,16 +14,16 @@ context('ix-video: styles', () => {
     cy.visit('/');
   });
 
-  const host = PLAYER_WITH_CONTAINER;
-  const player = `${host} video`;
-  const bigPLayButton = `${host} ${BIG_PLAY_BUTTON_SELECTOR}`;
+  const ixVideoTag = PLAYER_WITH_CONTAINER;
+  const videoTag = `${ixVideoTag} video`;
+  const bigPLayButton = `${ixVideoTag} ${BIG_PLAY_BUTTON_SELECTOR}`;
 
   it('should render', () => {
-    cy.get(host).should('exist');
+    cy.get(ixVideoTag).should('exist');
   });
 
   it('should have a video element', () => {
-    cy.get(player).should('exist');
+    cy.get(videoTag).should('exist');
   });
 
   it('should display video controls', () => {
@@ -35,9 +35,9 @@ context('ix-video: styles', () => {
   });
 
   describe('with a class attribute', () => {
-    const playerContainer = `${host} .video-js`;
+    const playerContainer = `${ixVideoTag} .video-js`;
     it('should add the class name to the video element', () => {
-      cy.get(host).should('have.class', 'my-custom-class');
+      cy.get(ixVideoTag).should('have.class', 'my-custom-class');
       cy.get(playerContainer).should('have.class', 'my-custom-class');
     });
     it('should preserve video-js classnames', () => {

@@ -12,20 +12,20 @@ context('ix-video: data-setup attribute', () => {
   });
 
   describe('with data-setup attribute', () => {
-    const host = PLAYER_WITH_DATA_SETUP;
-    const player = `${host} video`;
-    const bigPLayButton = `${host} ${BIG_PLAY_BUTTON_SELECTOR}`;
-    const playButton = `${host} ${PLAY_BUTTON_SELECTOR}`;
-    const muteButton = `${host} ${MUTE_BUTTON_SELECTOR}`;
-    const playbackRateButton = `${host} ${PLAYBACK_RATE_BUTTON_SELECTOR} button`;
-    const playbackRateValue = `${host} ${PLAYBACK_RATE_BUTTON_SELECTOR} > .vjs-playback-rate-value`;
+    const ixVideoTag = PLAYER_WITH_DATA_SETUP;
+    const videoTag = `${ixVideoTag} video`;
+    const bigPLayButton = `${ixVideoTag} ${BIG_PLAY_BUTTON_SELECTOR}`;
+    const playButton = `${ixVideoTag} ${PLAY_BUTTON_SELECTOR}`;
+    const muteButton = `${ixVideoTag} ${MUTE_BUTTON_SELECTOR}`;
+    const playbackRateButton = `${ixVideoTag} ${PLAYBACK_RATE_BUTTON_SELECTOR} button`;
+    const playbackRateValue = `${ixVideoTag} ${PLAYBACK_RATE_BUTTON_SELECTOR} > .vjs-playback-rate-value`;
 
     it('should render', () => {
-      cy.get(host).should('exist');
+      cy.get(ixVideoTag).should('exist');
     });
 
     it('should have a video element', () => {
-      cy.get(player).should('exist');
+      cy.get(videoTag).should('exist');
     });
 
     it('should display video controls', () => {

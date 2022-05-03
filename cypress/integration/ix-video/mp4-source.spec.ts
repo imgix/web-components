@@ -11,18 +11,18 @@ context('ix-video: MP4 source URL', () => {
   });
 
   describe('with an MP4 source URL', () => {
-    const host = PLAYER_WITH_CONTAINER_MP4;
-    const player = `${host} video`;
-    const bigPLayButton = `${host} ${BIG_PLAY_BUTTON_SELECTOR}`;
-    const playButton = `${host} ${PLAY_BUTTON_SELECTOR}`;
-    const muteButton = `${host} ${MUTE_BUTTON_SELECTOR}`;
+    const ixVideoTag = PLAYER_WITH_CONTAINER_MP4;
+    const videoTag = `${ixVideoTag} video`;
+    const bigPLayButton = `${ixVideoTag} ${BIG_PLAY_BUTTON_SELECTOR}`;
+    const playButton = `${ixVideoTag} ${PLAY_BUTTON_SELECTOR}`;
+    const muteButton = `${ixVideoTag} ${MUTE_BUTTON_SELECTOR}`;
 
     it('should render', () => {
-      cy.get(host).should('exist');
+      cy.get(ixVideoTag).should('exist');
     });
 
     it('should have a video element', () => {
-      cy.get(player).should('exist');
+      cy.get(videoTag).should('exist');
     });
 
     it('should display video controls', () => {
