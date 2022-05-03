@@ -83,11 +83,12 @@ export class IxVideo extends LitElement {
    * @see https://docs.videojs.com/tutorial-options.html
    */
   @property({
+    type: Object,
     attribute: 'data-setup',
     converter: (value: string | null) =>
       convertDataSetupStringToObject(value ?? ''),
   })
-  dataSetup: DataSetup = {};
+  dataSetup = {};
 
   @property({type: Boolean})
   fixed = false;
