@@ -12,15 +12,15 @@ context('ix-video: <video> attributes', () => {
   });
 
   describe('with default <video> attributes', () => {
-    const host = PLAYER_WITH_CONTAINER_VIDEO_ATT;
-    const player = `${host} video`;
-    const bigPLayButton = `${host} ${BIG_PLAY_BUTTON_SELECTOR}`;
-    const playButton = `${host} ${PLAY_BUTTON_SELECTOR}`;
-    const muteButton = `${host} ${MUTE_BUTTON_SELECTOR}`;
-    const pipButton = `${host} ${PIP_BUTTON_SELECTOR}`;
+    const ixVideoTag = PLAYER_WITH_CONTAINER_VIDEO_ATT;
+    const videoTag = `${ixVideoTag} video`;
+    const bigPLayButton = `${ixVideoTag} ${BIG_PLAY_BUTTON_SELECTOR}`;
+    const playButton = `${ixVideoTag} ${PLAY_BUTTON_SELECTOR}`;
+    const muteButton = `${ixVideoTag} ${MUTE_BUTTON_SELECTOR}`;
+    const pipButton = `${ixVideoTag} ${PIP_BUTTON_SELECTOR}`;
 
     before(() => {
-      cy.get(host).should('exist');
+      cy.get(ixVideoTag).should('exist');
     });
 
     describe('disablePictureInPicture', () => {
@@ -32,8 +32,8 @@ context('ix-video: <video> attributes', () => {
 
     describe('with autoplay', () => {
       it('should autoplay', () => {
-        cy.get(host).should('have.attr', 'autoplay');
-        cy.get(player).should('have.attr', 'autoplay');
+        cy.get(ixVideoTag).should('have.attr', 'autoplay');
+        cy.get(videoTag).should('have.attr', 'autoplay');
         cy.get(bigPLayButton).should('have.css', 'display', 'none');
         cy.get(playButton).should('have.attr', 'title', 'Pause');
       });
@@ -47,8 +47,8 @@ context('ix-video: <video> attributes', () => {
 
     describe('with loop', () => {
       it('should loop', () => {
-        cy.get(host).should('have.attr', 'loop');
-        cy.get(player).should('have.attr', 'loop');
+        cy.get(ixVideoTag).should('have.attr', 'loop');
+        cy.get(videoTag).should('have.attr', 'loop');
       });
     });
   });

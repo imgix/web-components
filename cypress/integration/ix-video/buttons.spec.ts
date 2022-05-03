@@ -18,10 +18,10 @@ context('ix-video: buttons', () => {
     cy.visit('/');
   });
 
-  const host = PLAYER_WITH_CONTAINER;
-  const bigPLayButton = `${host} ${BIG_PLAY_BUTTON_SELECTOR}`;
-  const playButton = `${host} ${PLAY_BUTTON_SELECTOR}`;
-  const muteButton = `${host} ${MUTE_BUTTON_SELECTOR}`;
+  const ixVideoTag = PLAYER_WITH_CONTAINER;
+  const bigPLayButton = `${ixVideoTag} ${BIG_PLAY_BUTTON_SELECTOR}`;
+  const playButton = `${ixVideoTag} ${PLAY_BUTTON_SELECTOR}`;
+  const muteButton = `${ixVideoTag} ${MUTE_BUTTON_SELECTOR}`;
 
   it('should display video controls after clicking play', () => {
     cy.get(bigPLayButton).click();
