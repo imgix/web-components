@@ -20,6 +20,7 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitOverride": true,
     "baseUrl": ".",
+    "jsx": "react",
     "paths": {
       "~/*": ["./src/*"],
       "@/*": ["./dev/*"]

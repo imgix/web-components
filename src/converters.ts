@@ -5,8 +5,11 @@ import {DataSetup} from './types';
  * @returns {DataSetup}
  */
 export const convertDataSetupStringToObject = (
-  input: string | null | object
+  input: string | object | undefined
 ): DataSetup => {
+  if (!input) {
+    return {} as DataSetup;
+  }
   let options = {} as DataSetup;
   // if typeof input is an object, return it
   if (typeof input === 'object') {
