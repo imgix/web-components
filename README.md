@@ -29,25 +29,30 @@ To use the library in your project:
 ### React
 
 ```jsx
-import {IxVideo} from `@imgix/web-components`;
-import { createComponent } from "@lit-labs/react";
+import * as React from 'react';
+import {IxVideo} from '@imgix/web-components';
+import {createComponent} from '@lit-labs/react';
+
 // ... wrap the component with Lit's React wrapper
-export const Video = createComponent(React, "ix-video", IxVideo, {
-  onactivate: "activate",
-  onchange: "change",
+export const Video = createComponent(React, 'ix-video', IxVideo, {
+  onError: 'error',
 });
+
 // ... use the component
 function App() {
+  const handleEvent = (e: any, type: string) => {
+    console.info('ix-video: ' + type, e);
+  };
+
   return (
     <div className="App">
-        <div style={{ height: 500, width: 500 }}>
-          <Video
-            width="480"
-            height="255"
-            controls
-            source="https://assets.imgix.video/videos/girl-reading-book-in-library.mp4"
-          />
-        </div>
+      <div style={{height: 500, width: 500}}>
+        <Video
+          controls
+          source="https://assets.imgix.video/videos/girl-reading-book-in-library.mp4"
+          onError={(e) => handleEvent(e, 'error')}
+        />
+      </div>
     </div>
   );
 }
@@ -59,18 +64,37 @@ export default App;
 
 ```html
 <script setup>
-  import {IxVideo} from '@imgix/shared-wc';
+  import {IxVideo} from '@imgix/web-components';
+  import {ref} from 'vue';
+</script>
+<script>
+  // store a ref to the component
+  const ixVideo = ref(null);
+  export default {
+    methods: {
+      warn(message, event) {
+        // event handler
+        const video = ixVideo.value;
+        console.warn(message, event.detail);
+      },
+      toggleControls() {
+        // update component props
+        const video = ixVideo.value;
+        video.controls = !video.controls;
+      },
+    },
+  };
 </script>
 
 <template>
-  <div
-    style="width: 500px; height: 500px; display: flex; justify-content: center; margin: auto"
-  >
+  <div class="App">
+    <button @click="() => toggleControls()">Toggle Controls</button>
     <ix-video
-      width="480"
-      height="255"
+      ref="ixVideo"
       controls
       source="https://assets.imgix.video/videos/girl-reading-book-in-library.mp4"
+      data-setup='{ "playbackRates": [0.5, 1, 1.5, 2] }'
+      @error="(event) => warn('error:', event)"
     ></ix-video>
   </div>
 </template>
@@ -133,14 +157,10 @@ This repo uses Cypress to run e2e tests.
 Tests can be run with the `test` script, which will run your tests against Lit's development mode (with more verbose errors):
 
 ```bash
-npm test
+npm run test
 ```
 
-For local testing during development, the `test:dev:watch` command will run your tests in Lit's development mode (with verbose errors) on every change to your source files:
-
-```bash
-npm test:watch
-```
+For local e2e testing during development, you can run `npm run dev` and `npm run cypress:open` to start the development server and open the Cypress UI.
 
 Alternatively the `test:prod` command will run your tests in Lit's production mode.
 
