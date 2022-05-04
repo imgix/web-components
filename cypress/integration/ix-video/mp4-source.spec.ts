@@ -29,9 +29,6 @@ context('ix-video: MP4 source URL', () => {
       cy.get(bigPLayButton).should('exist');
     });
 
-    it('should display large play button on first render', () => {
-      cy.get(bigPLayButton).should('exist');
-    });
 
     it('should display video controls after clicking play', () => {
       cy.get(bigPLayButton).click();
