@@ -5,13 +5,6 @@ import {
   PLAY_BUTTON_SELECTOR,
 } from '../../fixtures/selectors';
 
-/**
- * TODO:
- * - Read the document w/h values and store them to compare against
- * - Split each describe block into it's own test
- * - Move selectors into fixture files
- * - Add helper and conversion functions unit tests
- */
 
 context('ix-video: buttons', () => {
   before(() => {
