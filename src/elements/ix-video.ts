@@ -93,6 +93,9 @@ export class IxVideo extends LitElement {
   @property({type: Boolean})
   fixed = false;
 
+  @property({type: String})
+  poster: string | undefined = undefined;
+
   /**
    * ------------------------------------------------------------------------
    * Component State
@@ -136,6 +139,7 @@ export class IxVideo extends LitElement {
       'width',
       'data-test-id',
       'class',
+      'poster',
     ];
     spreadHostAttributesToElement(attributeMap, player, excludeList);
   }
@@ -237,6 +241,15 @@ export class IxVideo extends LitElement {
     }
   };
 
+  private _getPoster = () => {
+    const width = this.width || this.videoRef.value?.offsetWidth || '';
+    const height = this.height || this.videoRef.value?.offsetHeight || '';
+    if (this.poster?.includes('://')) {
+      return `${this.poster}?w=${width}&h=${height}`;
+    }
+    return null;
+  };
+
   /**
    * ------------------------------------------------------------------------
    * Render Lifecycle Methods
@@ -244,6 +257,11 @@ export class IxVideo extends LitElement {
    */
   override render() {
     return html`
+      <style>
+        .vjs-poster {
+          background-size: cover;
+        }
+      </style>
       <video
         ${ref(this.videoRef)}
         class="video-js vjs-default-skin vjs-big-play-centered ${this
@@ -282,6 +300,11 @@ export class IxVideo extends LitElement {
         this.vjsPlayer?.fluid(!!fluid);
         stylesChanged = true;
       }
+      if (propName === 'poster') {
+        // Update the player poster to match the video element dimensions
+        const poster = this._getPoster();
+        poster && this.vjsPlayer?.poster(poster);
+      }
     });
 
     // If width/heigh/fixed props change, update ix-video's style properties.
@@ -305,13 +328,16 @@ export class IxVideo extends LitElement {
 
     // Initialize the videojs player, which will modify the DOM to add the
     // video player and its controls.
-    const vjsPLayer = videojs(player, options as VideoJsPlayerOptions, () => {
+    const vjsPlayer = videojs(player, options as VideoJsPlayerOptions, () => {
       console.log('ix-video: player ready');
       // Prevent VJS error logging in console
       videojs.log.level('off');
+      // Update the player poster to match the video element dimensions
+      const poster = this._getPoster();
+      poster && vjsPlayer.poster(poster);
     });
     // store a reference to the videojs player in state
-    this.vjsPlayer = vjsPLayer;
+    this.vjsPlayer = vjsPlayer;
   }
 
   override disconnectedCallback(): void {
