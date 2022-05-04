@@ -15,23 +15,42 @@ const dataSetup = JSON.stringify({
 });
 
 export function App() {
+  const [hasControls, setHadControls] = React.useState(true);
+  const [fixed, setFixed] = React.useState(false);
+  const [playerWidth, setPlayerWidth] = React.useState(0);
   // eslint-disable-next-line
   const handleEvent = (e: any, type: string) => {
     console.log('ix-video: ' + type, e);
+  };
+  const handleClick = () => {
+    setHadControls(!hasControls);
+  };
+  const handleFixed = () => {
+    setFixed(!fixed);
+  };
+
+  const updateWith = () => {
+    setPlayerWidth(playerWidth + 100);
   };
   return (
     <>
       <div className="App">
         <header className="App-header">
+          <button onClick={handleClick}>Toggle controls</button>
+          <button onClick={handleFixed}>Toggle fixed</button>
+          <button onClick={updateWith}>Increase width +100</button>
           <div className="mobile">
             <Video
-              controls
+              controls={hasControls}
               source="https://assets.imgix.video/videos/girl-reading-book-in-library.mp4"
               data-setup={dataSetup}
               data-test-id="react-player"
               className="my-custom-class"
               onError={(e) => handleEvent(e, 'error')}
               onSeeked={(e) => handleEvent(e, 'seeked')}
+              poster="https://sdk-test.imgix.net/amsterdam.jpg"
+              width={playerWidth ? playerWidth + '' : undefined}
+              fixed={fixed}
             />
           </div>
         </header>
