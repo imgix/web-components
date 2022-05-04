@@ -1,5 +1,14 @@
 # @imgix/web-components
 
+## 0.0.1-rc.3 (2022-05-04)
+
+### Features
+
+    * add controlled poster prop (bad398e (https://github.com/imgix/shared-wc/commit/bad398e4074a78654148013ee1bb693b7d8cce75))
+    * bubble-up video events to ix-video (2510770 (https://github.com/imgix/shared-wc/commit/25107702ef2c4a7bcdb8adc7d6089c2d4e5ad983))
+    * rename dataSetup to data-setup (5c3eb90 (https://github.com/imgix/shared-wc/commit/5c3eb9026ec819deddc82c4262ce3006cd1f25c8))
+    * use helper fn to create event details obj (2af6db4 (https://github.com/imgix/shared-wc/commit/2af6db4b5f12b4c39f694f8e89d2f55166bf2e85))
+
 ## 0.0.1-rc.2 (2022-04-25)
 
 ### Features

@@ -1,9 +1,6 @@
-import { LitElement } from "lit";
-import { VideoJsPlayerOptions } from "video.js";
-interface DataSetup extends Omit<VideoJsPlayerOptions, "width" | "height"> {
-    width: number | string;
-    height: number | string;
-}
+/// <reference types="video.js" />
+import { LitElement, PropertyValues } from "lit";
+import videojs from "video.js";
 /**
  * ix-video is a custom element that can be used to display a video.
  * It wraps the video.js player in a LitElement.
@@ -17,7 +14,21 @@ interface DataSetup extends Omit<VideoJsPlayerOptions, "width" | "height"> {
  * @property {string} width - The width of the video. Defaults to an empty string.
  */
 declare class IxVideo extends LitElement {
+    /**
+     * ------------------------------------------------------------------------
+     * Instance Variables
+     * ------------------------------------------------------------------------
+     */
+    /**
+     * HTMLVideoElement reference.
+     * @default Ref<HTMLVideoElement>
+     */
     videoRef: import("lit-html/directives/ref").Ref<HTMLVideoElement>;
+    /**
+     * ------------------------------------------------------------------------
+     * Component Properties
+     * ------------------------------------------------------------------------
+     */
     /**
      * Show/hide the video controls
      * @default true
@@ -26,27 +37,33 @@ declare class IxVideo extends LitElement {
     /**
      * Video player height
      */
-    height: string;
+    height: string | undefined;
     /**
      * The source of the video
      */
-    source: string;
+    source: string | undefined;
     /**
      * MIME type of the video
-     * @default 'application/x-mpegURL'
      */
     type: string;
     /**
      * Video player width
      */
-    width: string;
+    width: string | undefined;
     /**
      * Video.js data-setup options json string. Users should not set them same
      * options on both on the element and in data-setup. If they do, data-setup
      * takes precedence.
      * @see https://docs.videojs.com/tutorial-options.html
      */
-    dataSetup: string;
+    dataSetup: {};
+    fixed: boolean;
+    poster: string | undefined;
+    /**
+     * ------------------------------------------------------------------------
+     * Component State
+     * ------------------------------------------------------------------------
+     */
     /**
      * Generate a unique ID for the video element.
      *
@@ -55,15 +72,12 @@ declare class IxVideo extends LitElement {
      * video player when the element is removed from the DOM.
      */
     uid: string;
+    vjsPlayer: videojs.Player | undefined;
     /**
-     * Store videojs options object in a state property.
-     *
-     * This allows us to read the component's properties, format them in a way
-     * that video.js can read, and, if needed, merge them with the data-setup
-     * options. Storing this in state keeps the component properties from being
-     * overwritten.
+     * ------------------------------------------------------------------------
+     * Instance Methods
+     * ------------------------------------------------------------------------
      */
-    options: DataSetup;
     /**
      * Set all the attributes defined on the `<ix-video>` element and not on the
      * `<video>` element to the `<video>` element.
@@ -74,7 +88,54 @@ declare class IxVideo extends LitElement {
      * @returns void;
      */
     _spreadHostAttributesToPlayer(player: HTMLVideoElement): void;
+    private _addEventListener;
+    private _removeEventListener;
+    /**
+     * Add an event listener for every `<video>` event to `<ix-video>` and
+     * dispatch a custom event with the same name. This allows us to emulate the
+     * native `<video>` events on the custom element.
+     * @returns {void} void;
+     * @private
+     * @memberof IxVideo
+     */
+    private _bubbleUpEventListeners;
+    /**
+     * Remove every `<video>` event listener from to `<ix-video>` and dispatch a
+     * custom event with the same name. This should be invoked during cleanup,
+     * when the video player is removed from the DOM.
+     * @returns {void} void;
+     * @private
+     * @memberof IxVideo
+     */
+    private _removeEventListeners;
+    /**
+     * Get the updated video player's options and merge them with the data-setup
+     * options.
+     *
+     * Merging the data-setup options with the element options allows users to
+     * set VJS-specific options on the element. We assume users will not set the
+     * same option twice, and explain as much in the docs.
+     *
+     * @see https://docs.videojs.com/tutorial-options.html
+     * @returns {void} void;
+     * @private
+     * @memberof IxVideo
+     */
+    private _getOptions;
+    /**
+     * Update the host style properties to match the style object.
+     * @param {CSSStyleDeclaration} styles - CSSStyleDeclaration style object
+     * @returns {void} void;
+     */
+    private _setStyles;
+    private _getPoster;
+    /**
+     * ------------------------------------------------------------------------
+     * Render Lifecycle Methods
+     * ------------------------------------------------------------------------
+     */
     render(): import("lit-html").TemplateResult<1>;
+    updated(changed: PropertyValues<this>): void;
     firstUpdated(): void;
     disconnectedCallback(): void;
     protected createRenderRoot(): this;
