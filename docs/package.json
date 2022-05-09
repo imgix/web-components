@@ -1,0 +1,19 @@
+{
+  "name": "docs",
+  "version": "0.0.1",
+  "description": "imgix web-components documentation",
+  "main": "index.js",
+  "authors": {
+    "name": "imgix",
+    "email": "imgix-git-robot@imgix.com"
+  },
+  "repository": "@imgix/web-components/docs",
+  "scripts": {
+    "docs:dev": "vuepress dev src",
+    "docs:build": "vuepress build src"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "vuepress": "^1.5.3"
+  }
+}
