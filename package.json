@@ -2,9 +2,26 @@
   "name": "@imgix/web-components",
   "version": "0.0.1-rc.3",
   "description": "imgix Web Components library",
-  "main": "dist/index.bundled.js",
-  "module": "dist/index.bundled.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/imgix/web-components.git"
+  },
+  "bugs": {
+    "url": "https://github.com/imgix/vue/issues"
+  },
+  "main": "/dist/index.cjs.bundled.js",
+  "module": "/dist/index.bundled.js",
+  "jsnext:main": "/dist/index.bundled.js",
+  "unpkg": "dist/imgix-vue.min.js",
   "type": "module",
+  "files": [
+    "/dist",
+    "/src",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "custom-elements.json"
+  ],
   "scripts": {
     "build": "rollup -c rollup.config.mjs",
     "build:watch": "rollup -c rollup.config.mjs --watch",
@@ -50,6 +67,10 @@
     "video.js": "^7.18.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.17.10",
+    "@babel/plugin-proposal-class-properties": "^7.16.7",
+    "@babel/plugin-proposal-decorators": "^7.17.9",
+    "@babel/preset-env": "^7.17.10",
     "@custom-elements-manifest/analyzer": "^0.5.7",
     "@cypress/vite-dev-server": "^2.2.2",
     "@esm-bundle/chai": "^4.1.5",
@@ -57,6 +78,7 @@
     "@lit-labs/react": "^1.0.4",
     "@open-wc/testing": "^3.0.0-next.1",
     "@open-wc/testing-karma": "^4.0.9",
+    "@rollup/plugin-babel": "^5.3.1",
     "@rollup/plugin-commonjs": "^21.0.2",
     "@rollup/plugin-node-resolve": "^13.0.4",
     "@rollup/plugin-replace": "^3.0.0",
@@ -71,6 +93,7 @@
     "@typescript-eslint/eslint-plugin": "^4.3.0",
     "@typescript-eslint/parser": "^4.30.0",
     "@webcomponents/webcomponentsjs": "^2.6.0",
+    "babel-plugin-external-helpers": "^6.22.0",
     "concurrently": "^7.1.0",
     "conventional-changelog-conventionalcommits": "^4.6.3",
     "cypress": "^9.6.0",
