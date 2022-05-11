@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    // Ensure that Babel can safely transpile files in the TypeScript project
+    "isolatedModules": true,
     "target": "es2019",
     "module": "es2020",
     "lib": ["es2020", "DOM", "DOM.Iterable"],
