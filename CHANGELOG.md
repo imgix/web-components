@@ -1,5 +1,9 @@
 # @imgix/web-components
 
+## 0.0.1-rc.4 (2022-05-11)
+
+    * add cjs bundle (400135a (https://github.com/imgix/web-components/commit/400135afcae480d3f000e7e18aef49e7bf70cbf9))
+
 ## 0.0.1-rc.3 (2022-05-04)
 
 ### Features
