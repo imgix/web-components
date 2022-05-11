@@ -9,8 +9,8 @@
   },
   "repository": "@imgix/web-components/docs",
   "scripts": {
-    "docs:dev": "vuepress dev src",
-    "docs:build": "vuepress build src"
+    "dev": "vuepress dev src",
+    "build": "vuepress build src"
   },
   "license": "MIT",
   "devDependencies": {

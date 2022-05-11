@@ -1,14 +1,14 @@
 ---
 home: true
 heroImage: https://pluginicons.craft-cdn.com/imgix.svg?1511197213
-tagline: imgix web-components documentation
+tagline: Cross-framework Web Components to get you started with imgix
 actionText: Quick Start →
-actionLink: /quick-start/
+actionLink: /overview/
 features:
   - title: Framework agnostic
-    details: Us einReact, Vue, Angular, and more
+    details: Use in, Vue, Angular, and more
   - title: Bite sized
-    details: Small bundle and few dependencies
+    details: Small bundle with few dependencies
   - title: Simple
     details: Best practices use out-of-the-box
 footer: Made by imgix with ❤️

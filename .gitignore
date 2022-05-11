@@ -18,3 +18,5 @@ index.js.map
 index.d.ts
 index.d.ts.map
 pairing.md
+.temp/
+.cache/

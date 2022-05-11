@@ -1,10 +1,13 @@
 const {description} = require('../../package');
 
 module.exports = {
+  markdown: {
+    lineNumbers: true,
+  },
   /**
    * Ref：https://v1.vuepress.vuejs.org/config/#title
    */
-  title: 'imgix web-components docs',
+  title: '@imgix/web-components',
   /**
    * Ref：https://v1.vuepress.vuejs.org/config/#description
    */
@@ -16,7 +19,7 @@ module.exports = {
    * ref：https://v1.vuepress.vuejs.org/config/#head
    */
   head: [
-    ['meta', {name: 'theme-color', content: '#3eaf7c'}],
+    ['meta', {name: 'theme-color', content: '#f8510f'}],
     ['meta', {name: 'apple-mobile-web-app-capable', content: 'yes'}],
     ['meta', {name: 'apple-mobile-web-app-status-bar-style', content: 'black'}],
   ],
@@ -32,14 +35,15 @@ module.exports = {
     docsDir: '',
     editLinkText: '',
     lastUpdated: false,
+    displayAllHeaders: false,
     nav: [
       {
-        text: 'Quick Start',
-        link: '/quick-start/',
+        text: 'Overview',
+        link: '/overview/',
       },
       {
-        text: 'Config',
-        link: '/config/',
+        text: 'Stream Videos',
+        link: '/overview/ix-video/',
       },
       {
         text: 'imgix',
@@ -47,11 +51,12 @@ module.exports = {
       },
     ],
     sidebar: {
-      '/quick-start/': [
+      '/overview/': [
         {
-          title: 'Quick Start',
+          title: 'Overview',
           collapsable: false,
-          children: ['', 'using-vue'],
+          children: ['', 'installation', 'ix-video'],
+          sidebarDepth: 2,
         },
       ],
     },
@@ -60,5 +65,5 @@ module.exports = {
   /**
    * Apply plugins，ref：https://v1.vuepress.vuejs.org/zh/plugin/
    */
-  plugins: ['@vuepress/plugin-back-to-top', '@vuepress/plugin-medium-zoom'],
+  plugins: ['@vuepress/plugin-back-to-top'],
 };

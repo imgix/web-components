@@ -29,7 +29,8 @@
     "cypress:run": "cypress run",
     "cypress:run:watch": "cypress run --browser chrome --env WATCH=true",
     "cypress:run:prod": "cypress run --browser chrome --env MODE=prod",
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release",
+    "docs:dev": "cd docs && npm run dev"
   },
   "keywords": [
     "imgix",
