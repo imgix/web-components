@@ -1,5 +1,10 @@
 # @imgix/web-components
 
+## 0.0.1-rc.5 (2022-05-11)
+
+    * import vjs styles using static attribute (f324cac (https://github.com/imgix/web-components/commit/f324cace8ee99b6b19df3a65f280a7245579ca98))
+    * use postcss-lit to import vjs css (237413b (https://github.com/imgix/web-components/commit/237413bd15806c1d924f8c0d32169d0e71cea950))
+
 ## 0.0.1-rc.4 (2022-05-11)
 
     * add cjs bundle (400135a (https://github.com/imgix/web-components/commit/400135afcae480d3f000e7e18aef49e7bf70cbf9))
