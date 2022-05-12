@@ -2,7 +2,9 @@ import {html, LitElement, PropertyValues} from 'lit';
 import {customElement, property, state} from 'lit/decorators.js';
 import {createRef, ref} from 'lit/directives/ref.js';
 import videojs, {VideoJsPlayerOptions} from 'video.js';
-import 'video.js/dist/video-js.css';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore - video-js.css is not typed
+import vjsStyles from 'video.js/dist/video-js.css';
 import {DefaultVideoEventsMap} from '~/constants';
 import {convertDataSetupStringToObject} from '~/converters';
 import {
@@ -27,6 +29,9 @@ import {DataSetup} from '~/types';
  */
 @customElement('ix-video')
 export class IxVideo extends LitElement {
+  // Will insert a style tag to the document head. If we had the shadow-dom
+  // enabled, this would mean the styles would be scoped to this component.
+  static override styles = vjsStyles;
   /**
    * ------------------------------------------------------------------------
    * Instance Variables
