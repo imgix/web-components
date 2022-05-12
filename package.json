@@ -9,13 +9,14 @@
   "bugs": {
     "url": "https://github.com/imgix/vue/issues"
   },
-  "main": "/dist/index.cjs.bundled.js",
-  "module": "/dist/index.bundled.js",
-  "jsnext:main": "/dist/index.bundled.js",
-  "unpkg": "dist/imgix-vue.min.js",
+  "main": "/dist/index.bundled.mjs",
+  "module": "/dist/index.bundled.mjs",
+  "jsnext:main": "/dist/index.bundled.mjs",
+  "unpkg": "dist/index.bundled.umd.js",
   "type": "module",
   "files": [
-    "/dist",
+    "/dist/index.bundled.mjs",
+    "/dist/index.bundled.umd.js",
     "/src",
     "README.md",
     "CHANGELOG.md",
@@ -23,10 +24,11 @@
     "custom-elements.json"
   ],
   "scripts": {
-    "build": "rollup -c rollup.config.mjs",
-    "build:watch": "rollup -c rollup.config.mjs --watch",
+    "build": "npm run build:rollup && vite build",
+    "build:rollup": "rollup -c rollup.config.mjs",
+    "build:watch": "vite build --watch",
     "dev": "vite --config ./dev/vite.config.ts",
-    "dev:prod": "vite --mode production --config ./dev/vite.config.ts",
+    "preview": "vite preview --mode production",
     "lint": "npm run lint:lit-analyzer && npm run lint:eslint",
     "lint:eslint": "eslint 'src/**/*.ts'",
     "lint:lit-analyzer": "lit-analyzer",

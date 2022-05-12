@@ -11,14 +11,14 @@ export default defineConfig({
     },
   },
   build: {
+    emptyOutDir: false,
     cssCodeSplit: true,
     lib: {
       name: 'lib',
       entry: resolve(__dirname, 'src/index.ts'),
-      formats: ['umd'],
+      formats: ['umd', 'es'],
       fileName: (format) => {
         if (format === 'es') return `index.bundled.mjs`;
-        if (format === 'cjs') return `index.bundled.cjs`;
         return `index.bundled.${format}.js`;
       },
     },

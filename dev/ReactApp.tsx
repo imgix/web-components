@@ -1,6 +1,6 @@
 import {createComponent} from '@lit-labs/react';
-import {IxVideo} from '../src/index';
-
+// import {IxVideo} from '../src/index';
+import {IxVideo} from '../dist/index.bundled';
 //eslint-disable-next-line
 const React = (window as any).React as typeof import('react');
 //eslint-disable-next-line

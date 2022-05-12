@@ -22,13 +22,8 @@ export default {
   output: [
     // ES bundle
     {
-      file: './dist/index.bundled.js',
+      file: './dist/index.bundled.mjs',
       format: 'esm',
-    },
-    // IIFE bundle
-    {
-      file: './dist/index.cjs.bundled.js',
-      format: 'cjs',
     },
   ],
   onwarn(warning) {
