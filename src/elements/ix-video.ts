@@ -18,12 +18,14 @@ import {DataSetup} from '~/types';
  * It wraps the video.js player in a LitElement.
  * @class IxVideo
  * @extends {LitElement}
- * @property {string} source - Required. The source URL of the video.
- * @property {string} controls - Whether or not the video should display controls. Defaults to false.
- * @property {string} dataSetup - A dataSetup JSON string used by video.js. Defaults to an empty string.
- * @property {string} height - The height of the video. Defaults to an empty string.
+ * @property {string || undefined} source - Required. The source URL of the video.
+ * @property {boolean} controls - Whether or not the video should display controls. Defaults to false.
+ * @property {string} dataSetup - A dataSetup JSON string used by video.js. Defaults to an empty JSON string.
+ * @property {string || undefined} height - The height of the video.
  * @property {string} type - The type of the video. Default: 'application/x-mpegURL'.
- * @property {string} width - The width of the video. Defaults to an empty string.
+ * @property {string || undefined} width - The width of the video.
+ * @property {string || undefined} poster - The source URL of the poster image.
+ * @property {boolean} fixed - The source URL of the poster image. Defaults to false.
  */
 @customElement('ix-video')
 export class IxVideo extends LitElement {
@@ -251,12 +253,44 @@ export class IxVideo extends LitElement {
   };
 
   /**
+   * Determine if the user has included the video.js CSS file.
+   *
+   * This allows us to determine if we need to use a `<link>` tag to include the
+   * CSS file. If user has already included the CSS file, we can skip the
+   * `<link>` tag.
+   *
+   * Taken from: https://stackoverflow.com/a/25615777/11760796
+   *
+   * @returns {Boolean} true if video-js.css is loaded, false otherwise
+   */
+  private _shouldInjectStyleSheet() {
+    for (let i = 0; i < document.styleSheets.length; i++) {
+      if (
+        document.styleSheets[i].href &&
+        document.styleSheets[i].href?.match('/videojs.css')
+      ) {
+        if (document.styleSheets[i].cssRules.length == 0) {
+          return true;
+        }
+      } else if (i == document.styleSheets.length - 1) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
    * ------------------------------------------------------------------------
    * Render Lifecycle Methods
    * ------------------------------------------------------------------------
    */
   override render() {
     return html`
+      ${this._shouldInjectStyleSheet() &&
+      html`<link
+        href="https://vjs.zencdn.net/7.18.1/video-js.css"
+        rel="stylesheet"
+      />`}
       <style>
         .vjs-poster {
           background-size: cover;
