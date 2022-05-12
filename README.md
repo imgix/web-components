@@ -138,6 +138,23 @@ export default defineConfig({
 });
 ```
 
+### HTML
+
+```html
+<script type="module">
+  import {IxVideo} from './node_modules/@imgix/web-components/dist/index.bundled.js';
+</script>
+<!-- Alternatively, the component can be loaded via a CDN -->
+<script type="module" src="https://cdn.jsdelivr.net/npm/@imgix/web-components@1.0.0/dist/index.bundled.js"></script>
+<body>
+    <ix-video
+      controls
+      source="https://assets.imgix.video/videos/girl-reading-book-in-library.mp4"
+      data-setup='{ "playbackRates": [0.5, 1, 1.5, 2] }'
+    ></ix-video>
+</body>
+```
+
 # Development
 
 ## Setup
