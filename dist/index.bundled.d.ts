@@ -14,6 +14,9 @@ import videojs from "video.js";
  * @property {string} width - The width of the video. Defaults to an empty string.
  */
 declare class IxVideo extends LitElement {
+    // Will insert a style tag to the document head. If we had the shadow-dom
+    // enabled, this would mean the styles would be scoped to this component.
+    static styles: any;
     /**
      * ------------------------------------------------------------------------
      * Instance Variables
