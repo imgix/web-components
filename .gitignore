@@ -5,16 +5,4 @@
 /docs/node_modules
 custom-elements.json
 # top level source
-ix-video.js
-ix-video.js.map
-ix-video.d.ts
-ix-video.d.ts.map
-ix-gif.js
-ix-gif.js.map
-ix-gif.d.ts
-ix-gif.d.ts.map
-index.js
-index.js.map
-index.d.ts
-index.d.ts.map
 pairing.md
