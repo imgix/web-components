@@ -21,10 +21,8 @@ yarn add @imgix/web-components
 
 # Usage
 
-This library exports a collection of Web Components. Bellow is an example of how
+This library exports a collection of Web Components. Below is an example of how
 to import and use the `IxVideo` web-component in your project.
-
-To use the library in your project:
 
 ### React
 
@@ -100,8 +98,26 @@ export default App;
 </template>
 ```
 
-Vue might show some warnings in the console if you don't declare your custom
-element in it's configuration. To turn these warnings off, add the following:
+You will need to signal to the Vue compiler that this component is a custom element by adding the following:
+
+```js
+//vue.config.js
+module.exports = {
+  chainWebpack: config => {
+    config.module
+      .rule('vue')
+      .use('vue-loader')
+      .tap(options => ({
+        ...options,
+        compilerOptions: {
+          // treat any tag that starts with ix- as custom elements
+          isCustomElement: (name) => name.startsWith('ix-'),
+        }
+      }))
+  }
+```
+
+Or with Vite:
 
 ```js
 //vite.config.js
