@@ -1,5 +1,11 @@
 # @imgix/web-components
 
+## 0.0.1-rc.6 (2022-05-24)
+
+### Features
+
+    * update README
+
 ## 0.0.1-rc.5 (2022-05-11)
 
     * import vjs styles using static attribute (f324cac (https://github.com/imgix/web-components/commit/f324cace8ee99b6b19df3a65f280a7245579ca98))
